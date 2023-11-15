@@ -18,8 +18,8 @@ interface Product {
   styleUrl: './products-list.component.css'
 })
 
-export class ProductsListComponent implements OnInit {
-  products: Product[] = [];
+export class ProductsListComponent implements OnInit {  
+  products?: Product[];
 
   constructor(private httpClient: HttpClient) {}
 
@@ -28,9 +28,11 @@ export class ProductsListComponent implements OnInit {
   }
 
   fetchProductData(): void {
-    this.httpClient.get('/get_product_data/').subscribe(
-      (value) => {
-        //this.products = value;
+    console.log("inside fetchProductData");
+    this.httpClient.get('http://localhost:3000/products/').subscribe(
+      (data) => {
+        console.log(data);
+        this.products = data as Product[];
       },
       (error) => {
         console.error('Error fetching product data:', error);
