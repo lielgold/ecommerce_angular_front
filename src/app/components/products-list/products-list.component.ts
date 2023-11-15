@@ -27,11 +27,10 @@ export class ProductsListComponent implements OnInit {
     this.fetchProductData();
   }
 
-  fetchProductData(): void {
-    console.log("inside fetchProductData");
+  fetchProductData(): void {    
     this.httpClient.get('http://localhost:3000/products/').subscribe(
       (data) => {
-        console.log(data);
+        //console.log(data);
         this.products = data as Product[];
       },
       (error) => {
