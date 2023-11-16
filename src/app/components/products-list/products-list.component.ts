@@ -11,17 +11,23 @@ interface Product {
   category: 'yellow' | 'red' | 'blue';
 }
 
+interface LoginResponse {
+  token: string;
+  // Add other properties if there are more in the response
+}
+
 @Component({
   selector: 'app-products-list',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './products-list.component.html',
-  styleUrl: './products-list.component.css'
+  styleUrls: ['./products-list.component.css']
 })
 
 export class ProductsListComponent implements OnInit {
   products?: Product[];
   productForm: FormGroup;
+  loginForm: FormGroup;
 
   constructor(private httpClient: HttpClient, private formBuilder: FormBuilder) {
     this.productForm = this.formBuilder.group({
@@ -30,6 +36,12 @@ export class ProductsListComponent implements OnInit {
       description: ['', Validators.required],
       category: ['yellow', Validators.required]
     });
+
+    // Initialize the login form
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });    
   }
 
   ngOnInit(): void {
@@ -83,4 +95,32 @@ export class ProductsListComponent implements OnInit {
       }
     );
   }
+
+  // Login function
+  login(): void {
+    if (this.loginForm.valid) {
+      const loginData = {
+        username: this.loginForm.value.username,
+        password: this.loginForm.value.password
+      };
+
+      // Assuming there's a login endpoint on your backend
+      this.httpClient.post<LoginResponse>('http://localhost:3000/login/', loginData).subscribe(
+        (data) => {
+          console.log('Login successful:', data);          
+          // Save token to localStorage
+          localStorage.setItem('token', data.token);
+          //console.log('Token from localStorage:', localStorage.getItem('token'));
+          // Handle successful login, e.g., redirect to a new page          
+        },
+        (error) => {
+          console.error('Error logging in:', error);
+          // Handle login error, e.g., display an error message
+        }
+      );
+
+      // Reset the login form after submission
+      this.loginForm.reset();
+    }
+  }  
 }

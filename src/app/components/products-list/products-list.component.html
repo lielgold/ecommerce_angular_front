@@ -50,3 +50,16 @@
   
     <button type="submit">Add Product</button>
 </form>
+
+
+<!-- Login form -->
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+    <label for="username">Username:</label>
+    <input type="text" id="username" formControlName="username" required>
+  
+    <label for="password">Password:</label>
+    <input type="password" id="password" formControlName="password" required>
+  
+    <button type="submit">Login</button>
+  </form>
+  
