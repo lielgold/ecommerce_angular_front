@@ -3,20 +3,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component';
 
-const BACK_URL = 'http://localhost:3000';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  category: 'yellow' | 'red' | 'blue';
-}
+import { BACK_URL, Product } from '../../shared.module';
 
 interface LoginResponse {
-  token: string;
-  // Add other properties if there are more in the response
+  token: string;  
 }
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
@@ -28,7 +20,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
 @Component({
   selector: 'app-products-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ShoppingCartComponent],
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css'],
 })

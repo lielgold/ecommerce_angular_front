@@ -1,0 +1,26 @@
+<p>shopping-cart works!</p>
+
+<!-- product data -->
+<table *ngIf="products">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 50px; text-align: left;">ID</th>
+        <th scope="col" style="width: 150px; text-align: left;">Name</th>
+        <th scope="col" style="width: 50px; text-align: left;">Price</th>
+        <th scope="col" style="width: 200px; text-align: left;">Description</th>
+        <th scope="col" style="width: 100px; text-align: left;">Category</th>
+        <th scope="col" style="width: 50px; text-align: left;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.category }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>end shopping-cart</p>
