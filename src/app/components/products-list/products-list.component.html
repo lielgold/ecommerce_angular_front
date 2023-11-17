@@ -2,13 +2,18 @@
 
 <!-- products-list.component.html -->
 
-<table>
+<button (click)="fetchProductData()">Fetch Product Data</button>
+
+<!-- product data -->
+<table *ngIf="products">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Description</th>
+        <th scope="col" style="width: 50px; text-align: left;">ID</th>
+        <th scope="col" style="width: 150px; text-align: left;">Name</th>
+        <th scope="col" style="width: 50px; text-align: left;">Price</th>
+        <th scope="col" style="width: 200px; text-align: left;">Description</th>
+        <th scope="col" style="width: 100px; text-align: left;">Category</th>
+        <th scope="col" style="width: 50px; text-align: left;">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -17,7 +22,49 @@
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>
         <td>{{ product.description }}</td>
+        <td>{{ product.category }}</td>
+        <td>
+          <button (click)="deleteProduct(product.name)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>
+
+<!-- Add new product form -->
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="name" required>
   
+    <label for="price">Price:</label>
+    <input type="number" id="price" formControlName="price" required>
+  
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description" required></textarea>
+  
+    <label for="category">Category:</label>
+    <select id="category" formControlName="category" required>
+      <option value="yellow">Yellow</option>
+      <option value="red">Red</option>
+      <option value="blue">Blue</option>
+    </select>
+  
+    <button type="submit">Add Product</button>
+</form>
+
+
+<!-- Login form -->
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+    <label for="username">Username:</label>
+    <input type="text" id="username" formControlName="username" required>
+  
+    <label for="password">Password:</label>
+    <input type="password" id="password" formControlName="password" required>
+  
+    <button type="submit">Login</button>
+  </form>
+  
+<!-- Logout button -->
+<button (click)="logout()">Logout</button>
+
+<!-- Restricted Test button -->
+<button (click)="restricted_test()">Restricted Test</button>
