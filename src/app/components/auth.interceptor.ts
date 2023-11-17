@@ -1,32 +1,18 @@
-// injects the authentification token into the header of requests to the server
-
-import { Injectable } from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Get the token from localStorage
-    const token = localStorage.getItem('token');
-
-    // Clone the request and add the Authorization header with the token
-    if (token) {
-      const cloned = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      return next.handle(cloned);
-    }
-
-    // If no token, continue with the original request
-    return next.handle(request);
+    HttpRequest,
+    HttpEvent,
+    HttpHandlerFn,
+  } from '@angular/common/http';
+  
+  import { Observable } from 'rxjs';
+  
+  export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+    // Inject the current `AuthService` and use it to get an authentication token:
+    var authToken = localStorage.getItem('token');
+    if(authToken===null) authToken = "";
+    // Clone the request to add the authentication header.  
+    const reqWithHeader = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${authToken}`),
+    });
+    return next(reqWithHeader);
   }
-}

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+
+const BACK_URL = 'http://localhost:3000';
 
 interface Product {
   id: number;
@@ -16,12 +19,18 @@ interface LoginResponse {
   // Add other properties if there are more in the response
 }
 
+export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+  console.log(req.url);
+  return next(req);
+}
+
+
 @Component({
   selector: 'app-products-list',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './products-list.component.html',
-  styleUrls: ['./products-list.component.css']
+  styleUrls: ['./products-list.component.css'],
 })
 
 export class ProductsListComponent implements OnInit {
@@ -49,7 +58,7 @@ export class ProductsListComponent implements OnInit {
   }
 
   fetchProductData(): void {
-    this.httpClient.get('http://localhost:3000/products/').subscribe(
+    this.httpClient.get(BACK_URL + '/products/').subscribe(
       (data) => {
         this.products = data as Product[];
       },
@@ -69,7 +78,7 @@ export class ProductsListComponent implements OnInit {
         category: this.productForm.value.category
       };
 
-      this.httpClient.post('http://localhost:3000/products/', newProduct).subscribe(
+      this.httpClient.post(BACK_URL + '/products/', newProduct).subscribe(
         (data) => {
           console.log('Product added successfully:', data);
           this.fetchProductData();
@@ -85,7 +94,7 @@ export class ProductsListComponent implements OnInit {
 
   deleteProduct(productName: string): void {
     // Assuming there's an endpoint on your backend to handle product deletion
-    this.httpClient.post(`http://localhost:3000/remove/${productName}`, {}).subscribe(
+    this.httpClient.post(BACK_URL + `/remove/${productName}`, {}).subscribe(
       (data) => {
         console.log('Product deleted successfully:', data);
         this.fetchProductData();
@@ -105,7 +114,7 @@ export class ProductsListComponent implements OnInit {
       };
 
       // Assuming there's a login endpoint on your backend
-      this.httpClient.post<LoginResponse>('http://localhost:3000/login/', loginData).subscribe(
+      this.httpClient.post<LoginResponse>(BACK_URL + '/login/', loginData).subscribe(
         (data) => {
           console.log('Login successful:', data);          
           // Save token to localStorage
@@ -122,5 +131,32 @@ export class ProductsListComponent implements OnInit {
       // Reset the login form after submission
       this.loginForm.reset();
     }
+  }
+
+  // Logout function
+  logout(): void {
+    localStorage.setItem('token', '');
+    this.httpClient.post(BACK_URL + '/logout', {}).subscribe(
+      () => {
+        console.log('Logout successful');
+        //this.router.navigate(['/']); // Navigate to the root route
+      },
+      (error) => {
+        console.error('Error during logout:', error);
+        // Handle logout error
+      }
+    );
+  }
+
+  // Restricted test
+  restricted_test(): void {    
+    this.httpClient.get(BACK_URL + '/restricted_test', {}).subscribe(
+      () => {
+        console.log('restricted_test successful');        
+      },
+      (error) => {
+        console.error('Error during restricted_test:', error);        
+      }
+    );
   }  
 }
