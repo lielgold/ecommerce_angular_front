@@ -18,8 +18,7 @@ interface LoginResponse {
   styleUrls: ['./products-list.component.css'],
 })
 
-export class ProductsListComponent implements OnInit {
-  products?: Product[];
+export class ProductsListComponent implements OnInit{  
   productForm: FormGroup;
   loginForm: FormGroup;
   sharedService = inject(SharedService);
@@ -36,23 +35,24 @@ export class ProductsListComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
-    });    
+    });
+    
   }
 
-  ngOnInit(): void {
-    this.fetchProductData();
+  ngOnInit(): void {    
+    if(this.sharedService.products_list.length===0) this.sharedService.fetchProductData();
   }
 
-  fetchProductData(): void {
-    this.httpClient.get(BACK_URL + '/products/').subscribe(
-      (data) => {
-        this.products = data as Product[];
-      },
-      (error) => {
-        console.error('Error fetching product data:', error);
-      }
-    );
-  }
+  // fetchProductData(): void {
+  //   this.httpClient.get(BACK_URL + '/products/').subscribe(
+  //     (data) => {
+  //       this.products = data as Product[];
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching product data:', error);
+  //     }
+  //   );
+  // }
 
   onSubmit(): void {
     if (this.productForm.valid) {
@@ -67,7 +67,7 @@ export class ProductsListComponent implements OnInit {
       this.httpClient.post(BACK_URL + '/products/', newProduct).subscribe(
         (data) => {
           console.log('Product added successfully:', data);
-          this.fetchProductData();
+          this.sharedService.fetchProductData();
         },
         (error) => {
           console.error('Error adding new product:', error);
@@ -83,7 +83,7 @@ export class ProductsListComponent implements OnInit {
     this.httpClient.post(BACK_URL + `/remove/${productName}`, {}).subscribe(
       (data) => {
         console.log('Product deleted successfully:', data);
-        this.fetchProductData();
+        this.sharedService.fetchProductData();
       },
       (error) => {
         console.error('Error deleting product:', error);
@@ -149,11 +149,11 @@ export class ProductsListComponent implements OnInit {
   // add product from catalog to shopping cart
   // if use_wish_list_instead===true -> add the product to the wish list instead
   addProductFromCatalogToShoppingCart(product_id:number, use_wish_list_instead:boolean=false): void {
-    if(this.products === undefined) return;
+    if(this.sharedService.products_list.length===0) return;
     if(this.sharedService.isProductInCart(product_id) && use_wish_list_instead===false) return;
     else if(this.sharedService.isProductInWishList(product_id) && use_wish_list_instead===true) return;
 
-    for (const p of this.products) {
+    for (const p of this.sharedService.products_list) {
       if (p._id === product_id) {
         if(use_wish_list_instead) this.sharedService.addProductToWishList(p);        
         else this.sharedService.addProductToCart(p);

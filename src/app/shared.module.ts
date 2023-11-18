@@ -1,6 +1,8 @@
 
 export const BACK_URL = 'http://localhost:3000';
 import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { OnInit } from '@angular/core';
 
 export interface Product {
     _id: number;
@@ -13,9 +15,25 @@ export interface Product {
 @Injectable({
 providedIn: 'root',
 })
-export class SharedService {    
+export class SharedService {
+    products_list: Product[] = [];
     shopping_cart: Product[] = [];
     wish_list: Product[] = [];
+
+    constructor(private httpClient: HttpClient){        
+    }    
+
+    fetchProductData(): void {
+        this.httpClient.get(BACK_URL + '/products/').subscribe(
+            (data) => {
+            this.products_list = data as Product[];
+            },
+            (error) => {
+            console.error('Error fetching product data:', error);
+            }
+        );
+    }   
+       
 
     // add a product to the shopping cart
     addProductToCart(product:Product):void{

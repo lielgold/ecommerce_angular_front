@@ -25,9 +25,20 @@ export class WishListComponent{
     this.sharedService.removeProductFromWishListByID(product_id);
   }    
 
-  // remove product from catalog to shopping cart
+  // move product from wish list to shopping cart
   AddProductToCart(product_id:number): void {    
     this.sharedService.moveProductFromWishListToCart(product_id);
+  }
+
+  // move all products from wish list to shopping cart
+  AddAllProductsToCart(): void {
+    // Reverse the wish_list_products array
+    const reversedWishList = this.wish_list_products.slice().reverse();
+  
+    // Iterate over the reversed array
+    for (const product of reversedWishList) {
+      this.sharedService.moveProductFromWishListToCart(product._id);
+    }
   }
 
   // get the total price of the products

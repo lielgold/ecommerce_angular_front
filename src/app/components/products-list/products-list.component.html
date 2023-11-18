@@ -2,10 +2,10 @@
 
 <!-- products-list.component.html -->
 
-<button (click)="fetchProductData()">Fetch Product Data</button>
+<!-- <button (click)="fetchProductData()">Fetch Product Data</button> -->
 
 <!-- product data -->
-<table *ngIf="products">
+<table *ngIf="this.sharedService.products_list">
     <thead>
       <tr>
         <th scope="col" style="width: 50px; text-align: left;">ID</th>
@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products">
+      <tr *ngFor="let product of this.sharedService.products_list">
         <td>{{ product._id }}</td>
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>
