@@ -27,8 +27,11 @@
           <button (click)="deleteProduct(product.name)">Delete</button>
         </td>
         <td>
-            <button (click)="addProductFromCatalogToShoppingCart(product._id)">Add to Cart</button>
+            <button (click)="addProductFromCatalogToShoppingCart(product._id, false)">Add to Cart</button>
         </td>        
+        <td>
+          <button (click)="addProductFromCatalogToShoppingCart(product._id, true)">Add to Wish List</button>
+      </td>        
       </tr>
     </tbody>
   </table>

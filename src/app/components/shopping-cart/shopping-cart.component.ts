@@ -41,6 +41,11 @@ export class ShoppingCartComponent{
         console.error('Error during checkout:', error);        
       }
     );
+  }
+
+  // get the total price of the products
+  totalPrice(): number {
+    return this.shopping_cart_products.reduce((sum, product) => sum + product.price, 0);
   }  
 
 }

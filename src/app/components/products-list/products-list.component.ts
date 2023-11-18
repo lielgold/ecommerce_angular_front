@@ -147,13 +147,16 @@ export class ProductsListComponent implements OnInit {
   }
 
   // add product from catalog to shopping cart
-  addProductFromCatalogToShoppingCart(product_id:number): void {
+  // if use_wish_list_instead===true -> add the product to the wish list instead
+  addProductFromCatalogToShoppingCart(product_id:number, use_wish_list_instead:boolean=false): void {
     if(this.products === undefined) return;
-    if(this.sharedService.isProductInCart(product_id)) return;
+    if(this.sharedService.isProductInCart(product_id) && use_wish_list_instead===false) return;
+    else if(this.sharedService.isProductInWishList(product_id) && use_wish_list_instead===true) return;
 
     for (const p of this.products) {
       if (p._id === product_id) {
-        this.sharedService.addProductToCart(p);
+        if(use_wish_list_instead) this.sharedService.addProductToWishList(p);        
+        else this.sharedService.addProductToCart(p);
         break;
       }
     }

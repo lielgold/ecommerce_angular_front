@@ -1,7 +1,7 @@
 <p>shopping-cart works!</p>
 
 <!-- product data -->
-<table *ngIf="shopping_cart_products">
+<table *ngIf="wish_list_products">
     <thead>
       <tr>
         <th scope="col" style="width: 50px; text-align: left;">ID</th>
@@ -13,26 +13,30 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of shopping_cart_products">
+      <tr *ngFor="let product of wish_list_products">
         <td>{{ product._id }}</td>
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>
         <td>{{ product.description }}</td>
         <td>{{ product.category }}</td>
         <td>
-            <button (click)="removeProductFromShoppingCart(product._id)">Remove from Cart</button>
-        </td>         
+            <button (click)="removeProductFromWishList(product._id)">Remove from Wish List</button>
+        </td>   
+        <td>
+          <button (click)="AddProductToCart(product._id)">Add To Cart</button>
+      </td>            
       </tr>
     </tbody>
     <tfoot>
-        <tr>
-          <td>Total Price:</td>
-          <td>
-            {{ totalPrice() }}
-          </td>          
-        </tr>
-      </tfoot>      
+      <tr>
+        <td>Total Price:</td>
+        <td>
+          {{ totalPrice() }}
+        </td>
+        <td></td>
+      </tr>
+    </tfoot>    
   </table>
-  <button (click)="checkout()">Checkout</button>
+  
 
-  <p>end shopping-cart</p>
+  <p>end wish-cart</p>
