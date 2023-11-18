@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BACK_URL, Product} from '../../shared.module';
+import { BACK_URL, Product, SharedService} from '../../shared.module';
 import { RouterLink } from '@angular/router';
+import { inject} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -10,7 +12,35 @@ import { RouterLink } from '@angular/router';
   templateUrl: './shopping-cart.component.html',
   styleUrl: './shopping-cart.component.css'
 })
-export class ShoppingCartComponent {
-  products?: Product[];
+export class ShoppingCartComponent{
+  shopping_cart_products: Product[];
+  sharedService = inject(SharedService);
+
+  constructor(private httpClient: HttpClient){
+    this.shopping_cart_products = this.sharedService.getShoppingCart()
+  }
+
+  // remove product from catalog to shopping cart
+  removeProductFromShoppingCart(product_id:number): void {
+    this.sharedService.removeProductFromCartByID(product_id);
+  }  
+
+  // Buy all products in the shopping cart
+  checkout(): void {
+    const id_products_to_buy: number[] = this.shopping_cart_products.map(p => p._id);
+
+    //this.httpClient.post(BACK_URL + '/checkout', {productIds: id_products_to_buy }).subscribe(
+    this.httpClient.post(BACK_URL + '/checkout/',{}).subscribe(
+      () => {
+        console.log('checkout successful');
+        this.sharedService.removeAllProductsFromCart();
+        //this.router.navigate(['/']); // Navigate to the root route
+      },
+      (error) => {
+        console.error('Error during checkout:', error);
+        // Handle logout error
+      }
+    );
+  }  
 
 }

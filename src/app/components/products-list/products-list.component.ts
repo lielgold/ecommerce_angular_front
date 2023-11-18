@@ -1,26 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component';
 
-import { BACK_URL, Product } from '../../shared.module';
+import { BACK_URL, Product, SharedService } from '../../shared.module';
+import { inject} from '@angular/core';
 
 interface LoginResponse {
   token: string;  
 }
 
-export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-  console.log(req.url);
-  return next(req);
-}
-
-
 @Component({
   selector: 'app-products-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ShoppingCartComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css'],
 })
@@ -29,6 +22,7 @@ export class ProductsListComponent implements OnInit {
   products?: Product[];
   productForm: FormGroup;
   loginForm: FormGroup;
+  sharedService = inject(SharedService);
 
   constructor(private httpClient: HttpClient, private formBuilder: FormBuilder) {
     this.productForm = this.formBuilder.group({
@@ -63,7 +57,7 @@ export class ProductsListComponent implements OnInit {
   onSubmit(): void {
     if (this.productForm.valid) {
       const newProduct: Product = {
-        id: 0,
+        _id: 0,
         name: this.productForm.value.name,
         price: this.productForm.value.price,
         description: this.productForm.value.description,
@@ -150,5 +144,18 @@ export class ProductsListComponent implements OnInit {
         console.error('Error during restricted_test:', error);        
       }
     );
-  }  
+  }
+
+  // add product from catalog to shopping cart
+  addProductFromCatalogToShoppingCart(product_id:number): void {
+    if(this.products === undefined) return;
+    if(this.sharedService.isProductInCart(product_id)) return;
+
+    for (const p of this.products) {
+      if (p._id === product_id) {
+        this.sharedService.addProductToCart(p);
+        break;
+      }
+    }
+  }
 }
