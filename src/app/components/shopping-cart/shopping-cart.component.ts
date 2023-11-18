@@ -30,15 +30,15 @@ export class ShoppingCartComponent{
     const id_products_to_buy: number[] = this.shopping_cart_products.map(p => p._id);
 
     //this.httpClient.post(BACK_URL + '/checkout', {productIds: id_products_to_buy }).subscribe(
-    this.httpClient.post(BACK_URL + '/checkout/',{}).subscribe(
+    this.httpClient.post(BACK_URL + '/checkout/',{ productIds: id_products_to_buy }).subscribe(
       () => {
         console.log('checkout successful');
         this.sharedService.removeAllProductsFromCart();
-        //this.router.navigate(['/']); // Navigate to the root route
+        //this.sharedService.removeAllProductsFromCart();
+        // TODO show an alert to the user the he bought the items
       },
       (error) => {
-        console.error('Error during checkout:', error);
-        // Handle logout error
+        console.error('Error during checkout:', error);        
       }
     );
   }  

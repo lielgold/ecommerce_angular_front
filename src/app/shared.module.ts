@@ -34,7 +34,9 @@ export class SharedService {
     
   // Remove all products from the shopping cart
   removeAllProductsFromCart(): void {
-    this.shopping_cart = [];
+    while(this.shopping_cart.length!==0){
+        this.shopping_cart.pop();
+    }
   }    
 
     // Getter to retrieve the current shopping cart
