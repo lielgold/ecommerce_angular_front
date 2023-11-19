@@ -2,7 +2,13 @@
 export const BACK_URL = 'http://localhost:3000';
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { OnInit } from '@angular/core';
+
+// these are the actions the user picks after choosing the dialog
+export enum DialogAction {
+    AddToWishlist = 'add-to-wishlist', // add the product to the wish list
+    AddToCart = 'add-to-cart', // add the product to the shopping cart
+    RemoveFromCatalog = 'remove-from-catalog' // remove the product from the cart
+  }
 
 export interface Product {
     _id: number;

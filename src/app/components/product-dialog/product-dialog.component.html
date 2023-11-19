@@ -6,17 +6,17 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <div class="example-button-row">
-        <button mat-raised-button extended color="primary">
+        <button mat-raised-button extended color="primary" (click)="addToWishlist()">
             <mat-icon>favorite</mat-icon>
             Add To Wish List
           </button>    
 
-          <button mat-raised-button extended color="pink-button">
+          <button mat-raised-button extended color="pink-button" (click)="addToShoppingCart()">
             <mat-icon>add_shopping_cart</mat-icon>
             Add To Shopping Cart
           </button>
 
-          <button mat-raised-button extended color="red-button">
+          <button mat-raised-button extended color="red-button" (click)="removeFromCatalog()">
             <mat-icon>highlight_remove</mat-icon>
             Remove product from catalog
           </button>          

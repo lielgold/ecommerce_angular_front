@@ -9,6 +9,7 @@ import { inject} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { MatCardModule } from '@angular/material/card';
+import { DialogAction } from '../../shared.module';
 
 interface LoginResponse {
   token: string;  
@@ -164,6 +165,11 @@ export class ProductsListComponent implements OnInit{
     }
   }
 
+  // add product from catalog to shopping list  
+  addProductFromCatalogToWishList(product_id:number, use_wish_list_instead:boolean=false): void {
+    this.addProductFromCatalogToShoppingCart(product_id,true);
+  }  
+
   // Modify filterProducts to use this.search_value
   filterProducts(): void {
     // Use lowercase for case-insensitive search
@@ -182,7 +188,16 @@ export class ProductsListComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
+      console.log('The dialog was closed with result:', result);
+
+      if (result.action === DialogAction.AddToWishlist) {
+        this.addProductFromCatalogToWishList(result.productId);
+      } else if (result.action === DialogAction.AddToCart) {
+        this.addProductFromCatalogToShoppingCart(result.productId);
+      } else if (result.action === DialogAction.RemoveFromCatalog) {
+        this.deleteProduct(result.productId); // TODO fix deleteProduct to work on id in the backend
+      } else {
+        console.error('Chose a non-existent action in a product dialog');
+      }
   }  
 }
