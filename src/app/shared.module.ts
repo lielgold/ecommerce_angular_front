@@ -17,6 +17,7 @@ providedIn: 'root',
 })
 export class SharedService {
     products_list: Product[] = [];
+    filtered_products_list: Product[] = [];
     shopping_cart: Product[] = [];
     wish_list: Product[] = [];
 
@@ -27,6 +28,7 @@ export class SharedService {
         this.httpClient.get(BACK_URL + '/products/').subscribe(
             (data) => {
             this.products_list = data as Product[];
+            this.filtered_products_list = data as Product[];
             },
             (error) => {
             console.error('Error fetching product data:', error);
@@ -128,6 +130,21 @@ export class SharedService {
           // TODO: Add an alert to the user that the product was not found in the wish list
           console.log('Product not found in the wish list:', productID);
         }
-      }  
+      }
+
+      // update filter_products_list to only contain those that contain the search string
+      filterProducts(searchTerm: string): void {
+        // Use lowercase for case-insensitive search
+        const filterValue = searchTerm ? searchTerm.toLowerCase() : '';
+      
+        // Filter products based on the search term
+        this.filtered_products_list = this.products_list.filter((product) =>
+          product.name.toLowerCase().includes(filterValue)
+        );
+      }
+      // reset the filter
+      resetFilter():void{
+        this.filtered_products_list = [...this.products_list];
+      }
 
 }

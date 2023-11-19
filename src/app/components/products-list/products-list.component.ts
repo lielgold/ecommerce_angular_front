@@ -5,9 +5,11 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 
 import { BACK_URL, Product, SharedService } from '../../shared.module';
 import { inject} from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 interface LoginResponse {
   token: string;  
+  isUserAdmin: string;
 }
 
 @Component({
@@ -22,6 +24,7 @@ export class ProductsListComponent implements OnInit{
   productForm: FormGroup;
   loginForm: FormGroup;
   sharedService = inject(SharedService);
+  searchForm: FormGroup;  
 
   constructor(private httpClient: HttpClient, private formBuilder: FormBuilder) {
     this.productForm = this.formBuilder.group({
@@ -36,23 +39,17 @@ export class ProductsListComponent implements OnInit{
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+
+    // Initialize the search form
+    this.searchForm = this.formBuilder.group({
+      search_string: ['', Validators.required],
+    });    
     
   }
 
   ngOnInit(): void {    
     if(this.sharedService.products_list.length===0) this.sharedService.fetchProductData();
   }
-
-  // fetchProductData(): void {
-  //   this.httpClient.get(BACK_URL + '/products/').subscribe(
-  //     (data) => {
-  //       this.products = data as Product[];
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching product data:', error);
-  //     }
-  //   );
-  // }
 
   onSubmit(): void {
     if (this.productForm.valid) {
@@ -105,6 +102,8 @@ export class ProductsListComponent implements OnInit{
           console.log('Login successful:', data);          
           // Save token to localStorage
           localStorage.setItem('token', data.token);
+          localStorage.setItem('isUserAdmin', data.isUserAdmin);
+          
           //console.log('Token from localStorage:', localStorage.getItem('token'));
           // Handle successful login, e.g., redirect to a new page          
         },
@@ -161,4 +160,16 @@ export class ProductsListComponent implements OnInit{
       }
     }
   }
+
+  // Modify filterProducts to use this.search_value
+  filterProducts(): void {
+    // Use lowercase for case-insensitive search
+    const filterValue = this.searchForm.value.search_string.toLowerCase();
+    if (filterValue==='') {
+      this.sharedService.resetFilter();
+    }
+
+    // Filter products based on the search term
+    this.sharedService.filterProducts(filterValue);
+  }  
 }

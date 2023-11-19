@@ -2,10 +2,16 @@
 
 <!-- products-list.component.html -->
 
-<!-- <button (click)="fetchProductData()">Fetch Product Data</button> -->
+<!-- Search form -->
+<form [formGroup]="searchForm" (ngSubmit)="filterProducts()">
+  <label for="search_string">Search:</label>
+  <input type="text" id="search_string" formControlName="search_string" required>
+
+  <button type="submit">Search</button>
+</form>
 
 <!-- product data -->
-<table *ngIf="this.sharedService.products_list">
+<table *ngIf="this.sharedService.filtered_products_list">
     <thead>
       <tr>
         <th scope="col" style="width: 50px; text-align: left;">ID</th>
@@ -17,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of this.sharedService.products_list">
+      <tr *ngFor="let product of this.sharedService.filtered_products_list">
         <td>{{ product._id }}</td>
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>
@@ -74,4 +80,3 @@
 
 <!-- Restricted Test button -->
 <button (click)="restricted_test()">Restricted Test</button>
-
