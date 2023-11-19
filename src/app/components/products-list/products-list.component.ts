@@ -198,6 +198,7 @@ export class ProductsListComponent implements OnInit{
         this.deleteProduct(result.productId); // TODO fix deleteProduct to work on id in the backend
       } else {
         console.error('Chose a non-existent action in a product dialog');
-      }
+      }            
+    });
   }  
 }
