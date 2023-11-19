@@ -1,29 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 
-const BACK_URL = 'http://localhost:3000';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  category: 'yellow' | 'red' | 'blue';
-}
+import { BACK_URL, Product, SharedService } from '../../shared.module';
+import { inject} from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 interface LoginResponse {
-  token: string;
-  // Add other properties if there are more in the response
+  token: string;  
+  isUserAdmin: string;
 }
-
-export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-  console.log(req.url);
-  return next(req);
-}
-
 
 @Component({
   selector: 'app-products-list',
@@ -33,10 +20,11 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   styleUrls: ['./products-list.component.css'],
 })
 
-export class ProductsListComponent implements OnInit {
-  products?: Product[];
+export class ProductsListComponent implements OnInit{  
   productForm: FormGroup;
   loginForm: FormGroup;
+  sharedService = inject(SharedService);
+  searchForm: FormGroup;  
 
   constructor(private httpClient: HttpClient, private formBuilder: FormBuilder) {
     this.productForm = this.formBuilder.group({
@@ -50,28 +38,23 @@ export class ProductsListComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
+    });
+
+    // Initialize the search form
+    this.searchForm = this.formBuilder.group({
+      search_string: ['', Validators.required],
     });    
+    
   }
 
-  ngOnInit(): void {
-    this.fetchProductData();
-  }
-
-  fetchProductData(): void {
-    this.httpClient.get(BACK_URL + '/products/').subscribe(
-      (data) => {
-        this.products = data as Product[];
-      },
-      (error) => {
-        console.error('Error fetching product data:', error);
-      }
-    );
+  ngOnInit(): void {    
+    if(this.sharedService.products_list.length===0) this.sharedService.fetchProductData();
   }
 
   onSubmit(): void {
     if (this.productForm.valid) {
       const newProduct: Product = {
-        id: 0,
+        _id: 0,
         name: this.productForm.value.name,
         price: this.productForm.value.price,
         description: this.productForm.value.description,
@@ -81,7 +64,7 @@ export class ProductsListComponent implements OnInit {
       this.httpClient.post(BACK_URL + '/products/', newProduct).subscribe(
         (data) => {
           console.log('Product added successfully:', data);
-          this.fetchProductData();
+          this.sharedService.fetchProductData();
         },
         (error) => {
           console.error('Error adding new product:', error);
@@ -97,7 +80,7 @@ export class ProductsListComponent implements OnInit {
     this.httpClient.post(BACK_URL + `/remove/${productName}`, {}).subscribe(
       (data) => {
         console.log('Product deleted successfully:', data);
-        this.fetchProductData();
+        this.sharedService.fetchProductData();
       },
       (error) => {
         console.error('Error deleting product:', error);
@@ -119,6 +102,8 @@ export class ProductsListComponent implements OnInit {
           console.log('Login successful:', data);          
           // Save token to localStorage
           localStorage.setItem('token', data.token);
+          localStorage.setItem('isUserAdmin', data.isUserAdmin);
+          
           //console.log('Token from localStorage:', localStorage.getItem('token'));
           // Handle successful login, e.g., redirect to a new page          
         },
@@ -158,5 +143,33 @@ export class ProductsListComponent implements OnInit {
         console.error('Error during restricted_test:', error);        
       }
     );
+  }
+
+  // add product from catalog to shopping cart
+  // if use_wish_list_instead===true -> add the product to the wish list instead
+  addProductFromCatalogToShoppingCart(product_id:number, use_wish_list_instead:boolean=false): void {
+    if(this.sharedService.products_list.length===0) return;
+    if(this.sharedService.isProductInCart(product_id) && use_wish_list_instead===false) return;
+    else if(this.sharedService.isProductInWishList(product_id) && use_wish_list_instead===true) return;
+
+    for (const p of this.sharedService.products_list) {
+      if (p._id === product_id) {
+        if(use_wish_list_instead) this.sharedService.addProductToWishList(p);        
+        else this.sharedService.addProductToCart(p);
+        break;
+      }
+    }
+  }
+
+  // Modify filterProducts to use this.search_value
+  filterProducts(): void {
+    // Use lowercase for case-insensitive search
+    const filterValue = this.searchForm.value.search_string.toLowerCase();
+    if (filterValue==='') {
+      this.sharedService.resetFilter();
+    }
+
+    // Filter products based on the search term
+    this.sharedService.filterProducts(filterValue);
   }  
 }
