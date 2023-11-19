@@ -9,7 +9,7 @@ export interface Product {
     name: string;
     price: number;
     description: string;
-    category: 'yellow' | 'red' | 'blue';
+    category: 'yellow' | 'red' | 'blue';    
   }
 
 @Injectable({

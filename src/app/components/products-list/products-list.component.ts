@@ -5,7 +5,10 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 
 import { BACK_URL, Product, SharedService } from '../../shared.module';
 import { inject} from '@angular/core';
-import { NgModel } from '@angular/forms';
+
+import { MatDialog } from '@angular/material/dialog';
+import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
+import { MatCardModule } from '@angular/material/card';
 
 interface LoginResponse {
   token: string;  
@@ -15,7 +18,7 @@ interface LoginResponse {
 @Component({
   selector: 'app-products-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MatCardModule],
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css'],
 })
@@ -26,7 +29,7 @@ export class ProductsListComponent implements OnInit{
   sharedService = inject(SharedService);
   searchForm: FormGroup;  
 
-  constructor(private httpClient: HttpClient, private formBuilder: FormBuilder) {
+  constructor(private httpClient: HttpClient, private formBuilder: FormBuilder, public dialog: MatDialog) {
     this.productForm = this.formBuilder.group({
       name: ['', Validators.required],
       price: [0, Validators.required],
@@ -171,5 +174,15 @@ export class ProductsListComponent implements OnInit{
 
     // Filter products based on the search term
     this.sharedService.filterProducts(filterValue);
+  }
+
+  openDialog(product: Product): void {        
+    const dialogRef = this.dialog.open(ProductDialogComponent, {            
+      data: product,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
   }  
 }

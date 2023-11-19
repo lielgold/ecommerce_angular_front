@@ -1,0 +1,24 @@
+<h1 mat-dialog-title class="bigger-text">{{ this.product_data.name }}</h1>
+<mat-dialog-content>
+  <img [src]="'assets/images/orange_1.png'" alt="{{ product_data.name }}" style="max-width: 256px; max-height: 256px;" />
+  <p><strong>Price:{{ this.product_data.price }}$</strong></p>
+  <p>{{ this.product_data.description }}</p>    
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="example-button-row">
+        <button mat-raised-button extended color="primary">
+            <mat-icon>favorite</mat-icon>
+            Add To Wish List
+          </button>    
+
+          <button mat-raised-button extended color="pink-button">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Add To Shopping Cart
+          </button>
+
+          <button mat-raised-button extended color="red-button">
+            <mat-icon>highlight_remove</mat-icon>
+            Remove product from catalog
+          </button>          
+      </div>
+</mat-dialog-actions>
