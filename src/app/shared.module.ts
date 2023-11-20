@@ -3,13 +3,6 @@ export const BACK_URL = 'http://localhost:3000';
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-// these are the actions the user picks after choosing the dialog
-export enum DialogAction {
-    AddToWishlist = 'add-to-wishlist', // add the product to the wish list
-    AddToCart = 'add-to-cart', // add the product to the shopping cart
-    RemoveFromCatalog = 'remove-from-catalog' // remove the product from the cart
-  }
-
 export interface Product {
     _id: number;
     name: string;
@@ -40,7 +33,54 @@ export class SharedService {
             console.error('Error fetching product data:', error);
             }
         );
-    }   
+    }
+
+    // add product to catalog
+    addProductToCatalog(newProduct:Product):void{        
+        this.httpClient.post(BACK_URL + '/products/', newProduct).subscribe(
+            (data) => {
+              console.log('Product added successfully:', data);
+              this.fetchProductData();
+            },
+            (error) => {
+              console.error('Error adding new product:', error);
+            }
+        );
+    }
+
+    // remove the product from the catalog, only available to admin
+    removeProductFromCatalog(productID:number): void {
+        this.httpClient.post(BACK_URL + `/remove/${productID}`, {}).subscribe(
+            (data) => {
+              console.log('Product deleted successfully:', data);
+              this.fetchProductData();
+            },
+            (error) => {
+              console.error('Error deleting product:', error);
+            }
+          );
+    }
+
+  // add product from catalog to shopping cart
+  // if use_wish_list_instead===true -> add the product to the wish list instead
+  addProductFromCatalogToShoppingCart(product_id:number, use_wish_list_instead:boolean=false): void {
+    if(this.products_list.length===0) return;
+    if(this.isProductInCart(product_id) && use_wish_list_instead===false) return;
+    else if(this.isProductInWishList(product_id) && use_wish_list_instead===true) return;
+
+    for (const p of this.products_list) {
+      if (p._id === product_id) {
+        if(use_wish_list_instead) this.addProductToWishList(p);        
+        else this.addProductToCart(p);
+        break;
+      }
+    }
+  }
+
+  // add product from catalog to shopping list  
+  addProductFromCatalogToWishList(product_id:number, use_wish_list_instead:boolean=false): void {
+    this.addProductFromCatalogToShoppingCart(product_id,true);
+  }    
        
 
     // add a product to the shopping cart

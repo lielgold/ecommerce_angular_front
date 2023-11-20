@@ -9,7 +9,9 @@ import { inject} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { MatCardModule } from '@angular/material/card';
-import { DialogAction } from '../../shared.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 interface LoginResponse {
   token: string;  
@@ -19,7 +21,7 @@ interface LoginResponse {
 @Component({
   selector: 'app-products-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatCardModule],
+  imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule],
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css'],
 })
@@ -55,7 +57,7 @@ export class ProductsListComponent implements OnInit{
     if(this.sharedService.products_list.length===0) this.sharedService.fetchProductData();
   }
 
-  onSubmit(): void {
+  onSubmitNewProductForm(): void {
     if (this.productForm.valid) {
       const newProduct: Product = {
         _id: 0,
@@ -65,31 +67,9 @@ export class ProductsListComponent implements OnInit{
         category: this.productForm.value.category
       };
 
-      this.httpClient.post(BACK_URL + '/products/', newProduct).subscribe(
-        (data) => {
-          console.log('Product added successfully:', data);
-          this.sharedService.fetchProductData();
-        },
-        (error) => {
-          console.error('Error adding new product:', error);
-        }
-      );
-
+      this.sharedService.addProductToCatalog(newProduct);
       this.productForm.reset();
     }
-  }
-
-  deleteProduct(productName: string): void {
-    // Assuming there's an endpoint on your backend to handle product deletion
-    this.httpClient.post(BACK_URL + `/remove/${productName}`, {}).subscribe(
-      (data) => {
-        console.log('Product deleted successfully:', data);
-        this.sharedService.fetchProductData();
-      },
-      (error) => {
-        console.error('Error deleting product:', error);
-      }
-    );
   }
 
   // Login function
@@ -149,27 +129,6 @@ export class ProductsListComponent implements OnInit{
     );
   }
 
-  // add product from catalog to shopping cart
-  // if use_wish_list_instead===true -> add the product to the wish list instead
-  addProductFromCatalogToShoppingCart(product_id:number, use_wish_list_instead:boolean=false): void {
-    if(this.sharedService.products_list.length===0) return;
-    if(this.sharedService.isProductInCart(product_id) && use_wish_list_instead===false) return;
-    else if(this.sharedService.isProductInWishList(product_id) && use_wish_list_instead===true) return;
-
-    for (const p of this.sharedService.products_list) {
-      if (p._id === product_id) {
-        if(use_wish_list_instead) this.sharedService.addProductToWishList(p);        
-        else this.sharedService.addProductToCart(p);
-        break;
-      }
-    }
-  }
-
-  // add product from catalog to shopping list  
-  addProductFromCatalogToWishList(product_id:number, use_wish_list_instead:boolean=false): void {
-    this.addProductFromCatalogToShoppingCart(product_id,true);
-  }  
-
   // Modify filterProducts to use this.search_value
   filterProducts(): void {
     // Use lowercase for case-insensitive search
@@ -189,16 +148,6 @@ export class ProductsListComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed with result:', result);
-
-      if (result.action === DialogAction.AddToWishlist) {
-        this.addProductFromCatalogToWishList(result.productId);
-      } else if (result.action === DialogAction.AddToCart) {
-        this.addProductFromCatalogToShoppingCart(result.productId);
-      } else if (result.action === DialogAction.RemoveFromCatalog) {
-        this.deleteProduct(result.productId); // TODO fix deleteProduct to work on id in the backend
-      } else {
-        console.error('Chose a non-existent action in a product dialog');
-      }            
     });
   }  
 }

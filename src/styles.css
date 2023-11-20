@@ -3,12 +3,4 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-button[color="pink-button"] {
-    background-color: rgb(255, 103, 103);
-    color: white;
-}
 
-button[color="red-button"] {
-    background-color: rgb(255, 0, 0);
-    color: white;
-}

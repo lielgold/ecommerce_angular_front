@@ -4,10 +4,11 @@
 
 <!-- Search form -->
 <form [formGroup]="searchForm" (ngSubmit)="filterProducts()">
-  <label for="search_string">Search:</label>
-  <input type="text" id="search_string" formControlName="search_string" required>
-
-  <button type="submit">Search</button>
+  <mat-form-field appearance="fill">
+    <mat-label>Search:</mat-label>
+    <input matInput id="search_string" formControlName="search_string" required>
+    <mat-icon matSuffix (click)="filterProducts()">search</mat-icon>
+  </mat-form-field>
 </form>
 
 <!-- product data -->
@@ -30,20 +31,21 @@
         <td>{{ product.description }}</td>
         <td>{{ product.category }}</td>
         <td>
-          <button (click)="deleteProduct(product.name)">Delete</button>
+          <button (click)="this.sharedService.removeProductFromCatalog(product._id)">Delete</button>
         </td>
         <td>
-            <button (click)="addProductFromCatalogToShoppingCart(product._id, false)">Add to Cart</button>
+            <button (click)="this.sharedService.addProductFromCatalogToWishList(product._id, false)">Add to Cart</button>
         </td>        
         <td>
-          <button (click)="addProductFromCatalogToShoppingCart(product._id, true)">Add to Wish List</button>
+          <button (click)="this.sharedService.addProductFromCatalogToShoppingCart(product._id, true)">Add to Wish List</button>
       </td>        
       </tr>
     </tbody>
   </table>
 
 <!-- Add new product form -->
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+<!-- TODO should only be visilbe to admin -->
+<form [formGroup]="productForm" (ngSubmit)="onSubmitNewProductForm()">
     <label for="name">Name:</label>
     <input type="text" id="name" formControlName="name" required>
   

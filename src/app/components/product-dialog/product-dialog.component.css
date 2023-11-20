@@ -7,3 +7,13 @@
     font-size: 24px; /* Adjust the size as needed */
   }
 
+button[color="pink-button"] {
+    background-color: rgb(255, 86, 86);
+    color: white;
+}
+
+button[color="red-button"] {
+    background-color: rgb(255, 0, 0);
+    color: white;
+}  
+
