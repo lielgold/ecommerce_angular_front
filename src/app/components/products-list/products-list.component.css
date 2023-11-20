@@ -11,3 +11,7 @@
     width: 300px; /* Adjust the width as needed */
     cursor: pointer;
   }
+
+  .mat-form-add-product {
+    margin-right: 8px;
+  }

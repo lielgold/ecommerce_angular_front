@@ -45,25 +45,35 @@
 
 <!-- Add new product form -->
 <!-- TODO should only be visilbe to admin -->
-<form [formGroup]="productForm" (ngSubmit)="onSubmitNewProductForm()">
-    <label for="name">Name:</label>
-    <input type="text" id="name" formControlName="name" required>
-  
-    <label for="price">Price:</label>
-    <input type="number" id="price" formControlName="price" required>
-  
-    <label for="description">Description:</label>
-    <textarea id="description" formControlName="description" required></textarea>
-  
-    <label for="category">Category:</label>
-    <select id="category" formControlName="category" required>
-      <option value="yellow">Yellow</option>
-      <option value="red">Red</option>
-      <option value="blue">Blue</option>
-    </select>
-  
-    <button type="submit">Add Product</button>
+<!-- product-form.component.html -->
+<form [formGroup]="productForm" (ngSubmit)="onSubmitNewProductForm()" class="mat-form">
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Name:</mat-label>
+    <input matInput type="text" id="name" formControlName="name" required>
+  </mat-form-field>
+
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Price:</mat-label>
+    <input matInput type="number" id="price" formControlName="price" required>
+  </mat-form-field>
+
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Description:</mat-label>
+    <textarea matInput id="description" formControlName="description" required></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Category:</mat-label>
+    <mat-select id="category" formControlName="category" required>
+      <mat-option value="yellow">Yellow</mat-option>
+      <mat-option value="red">Red</mat-option>
+      <mat-option value="blue">Blue</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button type="submit">Add Product</button>
 </form>
+
 
 
 <!-- Login form -->

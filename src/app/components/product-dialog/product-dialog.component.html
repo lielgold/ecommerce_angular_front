@@ -2,6 +2,7 @@
 <mat-dialog-content>
   <img [src]="'assets/images/orange_1.png'" alt="{{ product_data.name }}" style="max-width: 256px; max-height: 256px;" />
   <p><strong>Price:{{ this.product_data.price }}$</strong></p>
+  <p>Category: {{ this.product_data.category }}</p>
   <p>{{ this.product_data.description }}</p>    
 </mat-dialog-content>
 <mat-dialog-actions>
