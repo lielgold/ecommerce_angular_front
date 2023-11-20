@@ -9,11 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { inject} from '@angular/core';
 import { SharedService } from '../../shared.module';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogContent, MatDialogModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatDialogContent, MatDialogModule, MatIconModule, MatButtonModule, RouterLink],
   templateUrl: './product-dialog.component.html',
   styleUrl: './product-dialog.component.css'
 })
@@ -36,6 +37,10 @@ export class ProductDialogComponent {
   removeFromCatalog(): void {    
     this.sharedService.removeProductFromCatalog(this.product_data._id)
     this.dialogRef.close({ result: "product removed from catalog" })
+  }
+
+  closeTheDialog():void{
+    this.dialogRef.close({ result: "User logs in" })
   }
 
 }

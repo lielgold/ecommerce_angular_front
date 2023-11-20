@@ -1,4 +1,4 @@
-<p>products-list works!</p>
+<div class="center-form">
 
 <!-- products-list.component.html -->
 
@@ -11,42 +11,28 @@
   </mat-form-field>
 </form>
 
-<!-- product data -->
-<table *ngIf="this.sharedService.filtered_products_list">
-    <thead>
-      <tr>
-        <th scope="col" style="width: 50px; text-align: left;">ID</th>
-        <th scope="col" style="width: 150px; text-align: left;">Name</th>
-        <th scope="col" style="width: 50px; text-align: left;">Price</th>
-        <th scope="col" style="width: 200px; text-align: left;">Description</th>
-        <th scope="col" style="width: 100px; text-align: left;">Category</th>
-        <th scope="col" style="width: 50px; text-align: left;">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of this.sharedService.filtered_products_list">
-        <td>{{ product._id }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.price }}$</td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.category }}</td>
-        <td>
-          <button (click)="this.sharedService.removeProductFromCatalog(product._id)">Delete</button>
-        </td>
-        <td>
-            <button (click)="this.sharedService.addProductFromCatalogToWishList(product._id, false)">Add to Cart</button>
-        </td>        
-        <td>
-          <button (click)="this.sharedService.addProductFromCatalogToShoppingCart(product._id, true)">Add to Wish List</button>
-      </td>        
-      </tr>
-    </tbody>
-  </table>
+<!-- product catalog -->
+<div class="product-grid">
+  <mat-card *ngFor="let product of this.sharedService.filtered_products_list" (click)="openDialog(product)">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-subtitle>{{ product.price }}$</mat-card-subtitle>
+        <img mat-card-md-image src="assets/images/orange_1.png" >
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      {{product.description}}
+    </mat-card-content>
+  </mat-card>
+</div>
 
 <!-- Add new product form -->
 <!-- TODO should only be visilbe to admin -->
+<p></p>
+<h1>Add new product</h1>
 <!-- product-form.component.html -->
-<form [formGroup]="productForm" (ngSubmit)="onSubmitNewProductForm()" class="mat-form">
+<form [formGroup]="productForm" (ngSubmit)="onSubmitNewProductForm()" class="mat-form" *ngIf="this.sharedService.isUserAdmin">
   <mat-form-field class="mat-form-add-product">
     <mat-label>Name:</mat-label>
     <input matInput type="text" id="name" formControlName="name" required>
@@ -74,38 +60,7 @@
   <button mat-raised-button type="submit">Add Product</button>
 </form>
 
-
-
-<!-- Login form -->
-<form [formGroup]="loginForm" (ngSubmit)="login()">
-    <label for="username">Username:</label>
-    <input type="text" id="username" formControlName="username" required>
-  
-    <label for="password">Password:</label>
-    <input type="password" id="password" formControlName="password" required>
-  
-    <button type="submit">Login</button>
-  </form>
-  
-<!-- Logout button -->
-<button (click)="logout()">Logout</button>
-
 <!-- Restricted Test button -->
 <button (click)="restricted_test()">Restricted Test</button>
 
-
-<!-- product catalog -->
-<div class="product-grid">
-  <mat-card *ngFor="let product of this.sharedService.filtered_products_list" (click)="openDialog(product)">
-    <mat-card-header>
-      <mat-card-title-group>
-        <mat-card-title>{{ product.name }}</mat-card-title>
-        <mat-card-subtitle>{{ product.price }}$</mat-card-subtitle>
-        <img mat-card-md-image src="assets/images/orange_1.png" >
-      </mat-card-title-group>
-    </mat-card-header>
-    <mat-card-content>
-      {{product.description}}
-    </mat-card-content>
-  </mat-card>
 </div>

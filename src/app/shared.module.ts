@@ -2,6 +2,12 @@
 export const BACK_URL = 'http://localhost:3000';
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
+interface LoginResponse {
+    token: string;  
+    isUserAdmin: string;
+  }
 
 export interface Product {
     _id: number;
@@ -19,8 +25,11 @@ export class SharedService {
     filtered_products_list: Product[] = [];
     shopping_cart: Product[] = [];
     wish_list: Product[] = [];
+    isUserAdmin:boolean=false;
+    isLoggedIn:boolean=false;
+    loggedUsername:string='';
 
-    constructor(private httpClient: HttpClient){        
+    constructor(private httpClient: HttpClient, private router: Router){        
     }    
 
     fetchProductData(): void {
@@ -192,5 +201,96 @@ export class SharedService {
       resetFilter():void{
         this.filtered_products_list = [...this.products_list];
       }
+
+      // login to user account
+      login(username:string, password:string){
+        const loginData = {
+            username: username,
+            password: password
+          };
+    
+          // Assuming there's a login endpoint on your backend
+          this.httpClient.post<LoginResponse>(BACK_URL + '/login/', loginData).subscribe(
+            (data) => {
+              console.log('Login successful:', data);          
+              // Save token to localStorage
+              localStorage.setItem('token', data.token);
+              localStorage.setItem('isUserAdmin', data.isUserAdmin);
+              localStorage.setItem('username', username);
+              this.update_login_status();
+              //console.log('Token from localStorage:', localStorage.getItem('token'));
+              // Handle successful login, e.g., redirect to a new page          
+            },
+            (error) => {
+              console.error('Error logging in:', error);
+              // Handle login error, e.g., display an error message
+            }
+          ); 
+      }
+
+      // register a new account
+      register(username:string, password:string, retype_password:string){
+        const registerData = {
+            username: username,
+            password: password,
+            retype_password: retype_password
+          };
+    
+          // Assuming there's a login endpoint on your backend
+          this.httpClient.post<LoginResponse>(BACK_URL + '/register/', registerData).subscribe(
+            (data) => {
+              console.log('Registration successful:', data);
+              console.log('token:', data.token);
+              console.log('isUserAdmin:', data.isUserAdmin);
+              localStorage.setItem('token', data.token);
+              localStorage.setItem('isUserAdmin', data.isUserAdmin);
+              localStorage.setItem('username', username);
+              this.update_login_status();              
+              // TODO add a succesful logged in message              
+            },
+            (error) => {
+              console.error('Error logging in:', error);
+              // TODO Handle login error, e.g., display an error message
+            }
+          ); 
+      }        
+
+    update_login_status(){
+        if(localStorage.getItem('token')) this.isLoggedIn = true;
+        else this.isLoggedIn = false;
+
+        if(localStorage.getItem('isUserAdmin')) this.isUserAdmin = true;
+        else this.isUserAdmin = false;
+
+        if(localStorage.getItem('username')) {
+            const n = localStorage.getItem('username');
+            if (n!=null) this.loggedUsername = n;
+        }
+        else this.loggedUsername = "";
+    }
+
+  // Logout function
+  logout(): void {
+    // clean login
+    localStorage.setItem('token', '');
+    localStorage.setItem('isUserAdmin', '');
+    localStorage.setItem('username', '');
+    this.update_login_status();
+    this.wish_list = [];
+    this.shopping_cart = [];    
+
+    this.httpClient.post(BACK_URL + '/logout', {}).subscribe(
+      () => {
+        console.log('Logout successful');
+        //this.router.navigate(['/']); // Navigate to the root route
+      },
+      (error) => {
+        console.error('Error during logout:', error);
+        // Handle logout error
+      }
+    );
+  }    
+
+      
 
 }

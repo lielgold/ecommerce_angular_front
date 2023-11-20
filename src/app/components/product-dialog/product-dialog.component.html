@@ -5,21 +5,24 @@
   <p>Category: {{ this.product_data.category }}</p>
   <p>{{ this.product_data.description }}</p>    
 </mat-dialog-content>
-<mat-dialog-actions>
-    <div class="example-button-row">
-        <button mat-raised-button extended color="primary" (click)="addToShoppingCart()">
-            <mat-icon>add_shopping_cart</mat-icon>
-            Add To Shopping Cart
-          </button>
-                  
-        <button mat-raised-button extended color="accent" (click)="addToWishlist()">
-            <mat-icon>favorite</mat-icon>
-            Add To Wish List
-          </button>    
+<mat-dialog-actions class="button-row">    
+    <button mat-raised-button extended color="primary" (click)="addToShoppingCart()" *ngIf="this.sharedService.isLoggedIn">
+        <mat-icon>add_shopping_cart</mat-icon>
+        Add To Shopping Cart
+        </button>
+                
+    <button mat-raised-button extended color="accent" (click)="addToWishlist()" *ngIf="this.sharedService.isLoggedIn">
+        <mat-icon>favorite</mat-icon>
+        Add To Wish List
+        </button>    
 
-          <button mat-raised-button extended color="warn" (click)="removeFromCatalog()">
-            <mat-icon>highlight_remove</mat-icon>
-            Remove product from catalog
-          </button>          
-      </div>
+        <button mat-raised-button extended color="warn" (click)="removeFromCatalog()" *ngIf="this.sharedService.isUserAdmin">
+        <mat-icon>highlight_remove</mat-icon>
+        Remove product from catalog
+        </button>
+        
+        <button mat-raised-button extended color="warn" *ngIf="!this.sharedService.isLoggedIn" routerLink="/login_page"  (click)="closeTheDialog()">
+        <mat-icon>login</mat-icon>
+        Login to buy
+        </button>
 </mat-dialog-actions>

@@ -14,11 +14,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
-interface LoginResponse {
-  token: string;  
-  isUserAdmin: string;
-}
-
 @Component({
   selector: 'app-products-list',
   standalone: true,
@@ -28,8 +23,7 @@ interface LoginResponse {
 })
 
 export class ProductsListComponent implements OnInit{  
-  productForm: FormGroup;
-  loginForm: FormGroup;
+  productForm: FormGroup;  
   sharedService = inject(SharedService);
   searchForm: FormGroup;  
 
@@ -39,12 +33,6 @@ export class ProductsListComponent implements OnInit{
       price: [0, Validators.required],
       description: ['', Validators.required],
       category: ['yellow', Validators.required]
-    });
-
-    // Initialize the login form
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
     });
 
     // Initialize the search form
@@ -71,51 +59,6 @@ export class ProductsListComponent implements OnInit{
       this.sharedService.addProductToCatalog(newProduct);
       this.productForm.reset();
     }
-  }
-
-  // Login function
-  login(): void {
-    if (this.loginForm.valid) {
-      const loginData = {
-        username: this.loginForm.value.username,
-        password: this.loginForm.value.password
-      };
-
-      // Assuming there's a login endpoint on your backend
-      this.httpClient.post<LoginResponse>(BACK_URL + '/login/', loginData).subscribe(
-        (data) => {
-          console.log('Login successful:', data);          
-          // Save token to localStorage
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('isUserAdmin', data.isUserAdmin);
-          
-          //console.log('Token from localStorage:', localStorage.getItem('token'));
-          // Handle successful login, e.g., redirect to a new page          
-        },
-        (error) => {
-          console.error('Error logging in:', error);
-          // Handle login error, e.g., display an error message
-        }
-      );
-
-      // Reset the login form after submission
-      this.loginForm.reset();
-    }
-  }
-
-  // Logout function
-  logout(): void {
-    localStorage.setItem('token', '');
-    this.httpClient.post(BACK_URL + '/logout', {}).subscribe(
-      () => {
-        console.log('Logout successful');
-        //this.router.navigate(['/']); // Navigate to the root route
-      },
-      (error) => {
-        console.error('Error during logout:', error);
-        // Handle logout error
-      }
-    );
   }
 
   // Restricted test
