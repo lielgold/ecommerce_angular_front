@@ -1,0 +1,24 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 10px;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  margin-right: 2vh; 
+  margin-left: 2vh; 
+}
+
+.product-grid mat-card {
+  width: 300px; /* Adjust the width as needed */
+  cursor: pointer;
+}
+
+.mat-form-add-product {
+  margin-right: 8px;
+}
+
+.center-form {
+  text-align: center;
+  margin-top: 2vh; /* Adjust the top margin as needed */
+}  

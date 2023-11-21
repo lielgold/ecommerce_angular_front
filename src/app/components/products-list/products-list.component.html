@@ -1,82 +1,59 @@
-<p>products-list works!</p>
 
 <!-- products-list.component.html -->
+<div class="center-form">
 
 <!-- Search form -->
 <form [formGroup]="searchForm" (ngSubmit)="filterProducts()">
-  <label for="search_string">Search:</label>
-  <input type="text" id="search_string" formControlName="search_string" required>
-
-  <button type="submit">Search</button>
+  <mat-form-field appearance="fill">
+    <mat-label>Search:</mat-label>
+    <input matInput id="search_string" formControlName="search_string" required>
+    <mat-icon matSuffix (click)="filterProducts()">search</mat-icon>
+  </mat-form-field>
 </form>
 
-<!-- product data -->
-<table *ngIf="this.sharedService.filtered_products_list">
-    <thead>
-      <tr>
-        <th scope="col" style="width: 50px; text-align: left;">ID</th>
-        <th scope="col" style="width: 150px; text-align: left;">Name</th>
-        <th scope="col" style="width: 50px; text-align: left;">Price</th>
-        <th scope="col" style="width: 200px; text-align: left;">Description</th>
-        <th scope="col" style="width: 100px; text-align: left;">Category</th>
-        <th scope="col" style="width: 50px; text-align: left;">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of this.sharedService.filtered_products_list">
-        <td>{{ product._id }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.category }}</td>
-        <td>
-          <button (click)="deleteProduct(product.name)">Delete</button>
-        </td>
-        <td>
-            <button (click)="addProductFromCatalogToShoppingCart(product._id, false)">Add to Cart</button>
-        </td>        
-        <td>
-          <button (click)="addProductFromCatalogToShoppingCart(product._id, true)">Add to Wish List</button>
-      </td>        
-      </tr>
-    </tbody>
-  </table>
+<!-- product catalog -->
+<div class="product-grid">
+  <mat-card *ngFor="let product of this.sharedService.filtered_products_list" (click)="openDialog(product)">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-subtitle>{{ product.price }}$</mat-card-subtitle>
+        <img mat-card-md-image src="assets/images/orange_1.png" >
+      </mat-card-title-group>
+    </mat-card-header>
+  </mat-card>
+</div>
 
 <!-- Add new product form -->
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-    <label for="name">Name:</label>
-    <input type="text" id="name" formControlName="name" required>
-  
-    <label for="price">Price:</label>
-    <input type="number" id="price" formControlName="price" required>
-  
-    <label for="description">Description:</label>
-    <textarea id="description" formControlName="description" required></textarea>
-  
-    <label for="category">Category:</label>
-    <select id="category" formControlName="category" required>
-      <option value="yellow">Yellow</option>
-      <option value="red">Red</option>
-      <option value="blue">Blue</option>
-    </select>
-  
-    <button type="submit">Add Product</button>
+<!-- TODO should only be visilbe to admin -->
+<p></p>
+<!-- product-form.component.html -->
+<h1 *ngIf="this.sharedService.isUserAdmin">Add new product</h1>
+<form [formGroup]="productForm" (ngSubmit)="onSubmitNewProductForm()" class="mat-form" *ngIf="this.sharedService.isUserAdmin">
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Name:</mat-label>
+    <input matInput type="text" id="name" formControlName="name" required>
+  </mat-form-field>
+
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Price:</mat-label>
+    <input matInput type="number" id="price" formControlName="price" required>
+  </mat-form-field>
+
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Description:</mat-label>
+    <textarea matInput id="description" formControlName="description" required></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="mat-form-add-product">
+    <mat-label>Category:</mat-label>
+    <mat-select id="category" formControlName="category" required>
+      <mat-option value="yellow">Yellow</mat-option>
+      <mat-option value="red">Red</mat-option>
+      <mat-option value="blue">Blue</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button type="submit">Add Product</button>
 </form>
-
-
-<!-- Login form -->
-<form [formGroup]="loginForm" (ngSubmit)="login()">
-    <label for="username">Username:</label>
-    <input type="text" id="username" formControlName="username" required>
-  
-    <label for="password">Password:</label>
-    <input type="password" id="password" formControlName="password" required>
-  
-    <button type="submit">Login</button>
-  </form>
-  
-<!-- Logout button -->
-<button (click)="logout()">Logout</button>
-
-<!-- Restricted Test button -->
-<button (click)="restricted_test()">Restricted Test</button>
+</div>

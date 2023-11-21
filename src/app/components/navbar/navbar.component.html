@@ -1,21 +1,60 @@
-<p>navbar works!</p>
+<p></p>
+
+<mat-toolbar color="primary">  
+
+  <img class="logo-img" src="assets/images/company-logo.svg" alt="Company Logo" routerLink="/">
+
+  
+
+  <div class="navbar-brand">
+    <a class="navbar-item" routerLink="/">Catalog</a>
+    <a class="navbar-item" routerLink="/about">About</a>
+    <a class="navbar-item" routerLink="/contact">Contact</a>
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-end">
+      <!-- TODO only show those if the user is logged in -->
+
+      <!-- user name when logged in  -->
+      <a class="navbar-item" *ngIf="this.sharedService.isLoggedIn">
+          Welcome {{this.sharedService.loggedUsername}}
+      </a>
+
+      <!-- shopping cart -->
+      <a class="navbar-item" routerLink="shopping_cart" *ngIf="this.sharedService.isLoggedIn">
+        <mat-icon matBadge="{{this.sharedService.shopping_cart.length}}" matBadgeColor="warn" color="white">shopping_cart</mat-icon>            
+          <span class="cdk-visually-hidden">
+            Shopping cart
+          </span>
+          Cart
+    </a>
+
+      <!-- Wish List -->
+      <a class="navbar-item" routerLink="wish_list" *ngIf="this.sharedService.isLoggedIn">
+        <mat-icon matBadge="{{this.sharedService.wish_list.length}}" matBadgeColor="warn" color="white" >favorite</mat-icon>            
+          <span class="cdk-visually-hidden">
+            Wish List
+          </span>
+          Wish List
+      </a>      
+
+    <!-- Login -->
+    <a class="navbar-item" *ngIf="!this.sharedService.isLoggedIn" routerLink="/login_page">
+      <mat-icon>login</mat-icon>
+      Login
+    </a>
+    <!-- Logout -->
+    <a class="navbar-item" *ngIf="this.sharedService.isLoggedIn" routerLink="/" (click)="this.sharedService.logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </a>
+
+
+    </div>
+  </div>     
+
+</mat-toolbar>
+
 <!-- navbar.component.html -->
 
-<nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" routerLink="/">
-        Angular Navbar
-      </a>
-    </div>
-  
-    <div class="navbar-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" routerLink="/">Home</a>
-        <a class="navbar-item" routerLink="/about">About</a>
-        <a class="navbar-item" routerLink="/contact">Contact</a>
-        <a class="navbar-item" routerLink="shopping_cart">Shopping Cart</a>
-        <a class="navbar-item" routerLink="wish_list">Wish List</a>
-      </div>
-    </div>
-  </nav>
-  

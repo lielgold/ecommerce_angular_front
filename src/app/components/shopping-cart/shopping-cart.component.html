@@ -1,38 +1,18 @@
-<p>shopping-cart works!</p>
+<!-- product catalog -->
+<div class="center-form">  
+  <div class="product-grid">
+    <mat-card *ngFor="let product of this.sharedService.shopping_cart" (click)="openDialog(product)">    
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>{{ product.name }}</mat-card-title>
+          <mat-card-subtitle>{{ product.price }}$</mat-card-subtitle>
+          <img mat-card-md-image src="assets/images/orange_1.png" >
+        </mat-card-title-group>
+      </mat-card-header>
+    </mat-card>
+  </div>
+  <h1>Total Price: {{ totalPrice() }}$</h1>  
+  <button mat-raised-button extended color="primary" (click)="this.sharedService.checkout_all()">Checkout</button>  
+</div>
 
-<!-- product data -->
-<table *ngIf="shopping_cart_products">
-    <thead>
-      <tr>
-        <th scope="col" style="width: 50px; text-align: left;">ID</th>
-        <th scope="col" style="width: 150px; text-align: left;">Name</th>
-        <th scope="col" style="width: 50px; text-align: left;">Price</th>
-        <th scope="col" style="width: 200px; text-align: left;">Description</th>
-        <th scope="col" style="width: 100px; text-align: left;">Category</th>
-        <th scope="col" style="width: 50px; text-align: left;">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of shopping_cart_products">
-        <td>{{ product._id }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.category }}</td>
-        <td>
-            <button (click)="removeProductFromShoppingCart(product._id)">Remove from Cart</button>
-        </td>         
-      </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-          <td>Total Price:</td>
-          <td>
-            {{ totalPrice() }}
-          </td>          
-        </tr>
-      </tfoot>      
-  </table>
-  <button (click)="checkout()">Checkout</button>
-
-  <p>end shopping-cart</p>
+<!-- TODO add a confirmation alert -->

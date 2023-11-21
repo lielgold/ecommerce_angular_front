@@ -4,6 +4,7 @@ import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.
 import { WishListComponent } from './components/wish-list/wish-list.component';
 import { AboutPageComponent } from './components/about-page/about-page.component';
 import { ContactPageComponent } from './components/contact-page/contact-page.component';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 
 export const routes: Routes = [
     // example:
@@ -12,5 +13,6 @@ export const routes: Routes = [
     { path: 'contact', component: ContactPageComponent },
     { path: 'shopping_cart', component: ShoppingCartComponent }, 
     { path: 'wish_list', component: WishListComponent }, 
+    { path: 'login_page', component: LoginPageComponent }, 
 
 ];

@@ -1,0 +1,47 @@
+<div *ngIf="!this.sharedService.isLoggedIn">
+    <div class="center-form">
+        <h1>Login to your account:</h1>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <mat-form-field class="mat-form-add-product">
+            <mat-label>Username:</mat-label>
+            <input matInput type="text" id="username" formControlName="username" required>
+        </mat-form-field>
+    
+        <mat-form-field class="mat-form-add-product">
+            <mat-label>Password:</mat-label>
+            <input matInput type="password" id="password" formControlName="password" required>
+        </mat-form-field>
+    
+        <button mat-raised-button color="primary" type="submit" style="margin-bottom: 20px;">Login</button>
+        </form>
+
+        
+    <!-- Registration form -->
+    <div class="center-form">
+        <h1>Don't have an account? Register here:</h1>
+        <form [formGroup]="registrationForm" (ngSubmit)="register()">
+        <mat-form-field class="mat-form-add-product">
+            <mat-label>Username:</mat-label>
+            <input matInput type="text" id="reg_username" formControlName="reg_username" required>
+        </mat-form-field>
+    
+        <mat-form-field class="mat-form-add-product">
+            <mat-label>Password:</mat-label>
+            <input matInput type="password" id="reg_password" formControlName="reg_password" required>
+        </mat-form-field>
+    
+        <mat-form-field class="mat-form-add-product">
+            <mat-label>Retype Password:</mat-label>
+            <input matInput type="password" id="reg_retypePassword" formControlName="reg_retypePassword" required>
+        </mat-form-field>
+    
+        <button mat-raised-button color="primary" type="submit" style="margin-bottom: 20px;">Register</button>
+        </form>
+    </div>
+    
+    </div>
+</div>
+
+<div *ngIf="this.sharedService.isLoggedIn" class="center-form">
+    <h1>Welcome back {{this.sharedService.loggedUsername}}</h1>
+</div>
