@@ -22,7 +22,7 @@
       </a>
 
       <!-- shopping cart -->
-      <a class="navbar-item" routerLink="shopping_cart">
+      <a class="navbar-item" routerLink="shopping_cart" *ngIf="this.sharedService.isLoggedIn">
         <mat-icon matBadge="{{this.sharedService.shopping_cart.length}}" matBadgeColor="warn" color="white">shopping_cart</mat-icon>            
           <span class="cdk-visually-hidden">
             Shopping cart
@@ -31,8 +31,8 @@
     </a>
 
       <!-- Wish List -->
-      <a class="navbar-item" routerLink="wish_list">
-        <mat-icon matBadge="{{this.sharedService.wish_list.length}}" matBadgeColor="warn" color="white">favorite</mat-icon>            
+      <a class="navbar-item" routerLink="wish_list" *ngIf="this.sharedService.isLoggedIn">
+        <mat-icon matBadge="{{this.sharedService.wish_list.length}}" matBadgeColor="warn" color="white" >favorite</mat-icon>            
           <span class="cdk-visually-hidden">
             Wish List
           </span>

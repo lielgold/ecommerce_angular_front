@@ -1,43 +1,18 @@
-<p>shopping-cart works!</p>
+<!-- product catalog -->
+<div class="center-form">  
+  <div class="product-grid">
+    <mat-card *ngFor="let product of this.sharedService.wish_list" (click)="openDialog(product)">    
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>{{ product.name }}</mat-card-title>
+          <mat-card-subtitle>{{ product.price }}$</mat-card-subtitle>
+          <img mat-card-md-image src="assets/images/orange_1.png" >
+        </mat-card-title-group>
+      </mat-card-header>
+    </mat-card>
+  </div>  
+  <h1>Total Price: {{ totalPrice() }}$</h1>    
+  <button mat-raised-button extended color="primary" (click)="AddAllProductsToCart()">Add All Products To Cart</button>  
+</div>
 
-<!-- product data -->
-<table *ngIf="wish_list_products">
-    <thead>
-      <tr>
-        <th scope="col" style="width: 50px; text-align: left;">ID</th>
-        <th scope="col" style="width: 150px; text-align: left;">Name</th>
-        <th scope="col" style="width: 50px; text-align: left;">Price</th>
-        <th scope="col" style="width: 200px; text-align: left;">Description</th>
-        <th scope="col" style="width: 100px; text-align: left;">Category</th>
-        <th scope="col" style="width: 50px; text-align: left;">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of wish_list_products">
-        <td>{{ product._id }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.category }}</td>
-        <td>
-            <button (click)="removeProductFromWishList(product._id)">Remove from Wish List</button>
-        </td>   
-        <td>
-          <button (click)="AddProductToCart(product._id)">Add To Cart</button>
-      </td>            
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>Total Price:</td>
-        <td>
-          {{ totalPrice() }}
-        </td>
-        <td></td>
-      </tr>
-    </tfoot>    
-  </table>
-  <button (click)="AddAllProductsToCart()">Add All Products To Cart</button>
-  
-
-  <p>end wish-cart</p>
+<!-- TODO add a confirmation alert -->

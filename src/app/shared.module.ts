@@ -315,4 +315,6 @@ export class SharedService {
     this.checkout(id_products_to_buy);
   }    
 
+  
+
 }

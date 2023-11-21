@@ -1,5 +1,3 @@
-<p>shopping-cart works!</p>
-
 <!-- product catalog -->
 <div class="center-form">  
   <div class="product-grid">
@@ -13,9 +11,8 @@
       </mat-card-header>
     </mat-card>
   </div>
+  <h1>Total Price: {{ totalPrice() }}$</h1>  
+  <button mat-raised-button extended color="primary" (click)="this.sharedService.checkout_all()">Checkout</button>  
 </div>
-<h1>Total Price: {{ totalPrice() }}$</h1>  
-<button mat-raised-button extended color="primary" (click)="this.sharedService.checkout_all()">Checkout</button>
-<!-- TODO add a confirmation alert -->
 
-<!-- <button (click)="this.sharedService.removeProductFromCartByID(product._id)">Remove from Cart</button> -->
+<!-- TODO add a confirmation alert -->

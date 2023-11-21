@@ -46,7 +46,17 @@ export class ProductDialogComponent {
   checkoutProduct(): void {    
     this.sharedService.checkout([this.data.product._id]);    
     this.dialogRef.close({ result: "bought product" });
-  }  
+  }
+
+  removeProductFromWIshList(): void {    
+    this.sharedService.removeProductFromWishListByID(this.data.product._id);    
+    this.dialogRef.close({ result: "product removed from wish list" });
+  }
+
+  MoveProductToCart(): void {    
+    this.sharedService.moveProductFromWishListToCart(this.data.product._id);
+    this.dialogRef.close({ result: "product moved from wish list to cart" });
+  }    
 
   closeTheDialog():void{
     this.dialogRef.close({ result: "User logs in" })
