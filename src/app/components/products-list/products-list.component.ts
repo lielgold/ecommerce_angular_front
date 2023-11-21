@@ -87,7 +87,7 @@ export class ProductsListComponent implements OnInit{
 
   openDialog(product: Product): void {        
     const dialogRef = this.dialog.open(ProductDialogComponent, {            
-      data: product,
+      data: {product:product, dialog_type:"product_list"},
     });
 
     dialogRef.afterClosed().subscribe((result) => {

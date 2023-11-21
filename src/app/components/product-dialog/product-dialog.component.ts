@@ -20,24 +20,33 @@ import { RouterLink } from '@angular/router';
 })
 export class ProductDialogComponent {
   sharedService = inject(SharedService);
+  product:Product;
+  dialog_type:string;
   
-  constructor(@Inject(MAT_DIALOG_DATA) public product_data: Product, public dialogRef: MatDialogRef<ProductDialogComponent>) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { product: Product, dialog_type: string }, public dialogRef: MatDialogRef<ProductDialogComponent>) {
+    this.product=data.product;
+    this.dialog_type=data.dialog_type;
   }
 
   addToWishlist(): void {    
-    this.sharedService.addProductFromCatalogToWishList(this.product_data._id)
-    this.dialogRef.close({ result: "product added to wish list" })
+    this.sharedService.addProductFromCatalogToWishList(this.data.product._id);
+    this.dialogRef.close({ result: "product added to wish list" });
   }
 
   addToShoppingCart(): void {  
-    this.sharedService.addProductFromCatalogToShoppingCart(this.product_data._id)
-    this.dialogRef.close({ result: "product added to shopping cart" })
+    this.sharedService.addProductFromCatalogToShoppingCart(this.data.product._id);
+    this.dialogRef.close({ result: "product added to shopping cart" });
   }
 
   removeFromCatalog(): void {    
-    this.sharedService.removeProductFromCatalog(this.product_data._id)
-    this.dialogRef.close({ result: "product removed from catalog" })
+    this.sharedService.removeProductFromCatalog(this.data.product._id);
+    this.dialogRef.close({ result: "product removed from catalog" });
   }
+
+  checkoutProduct(): void {    
+    this.sharedService.checkout([this.data.product._id]);    
+    this.dialogRef.close({ result: "bought product" });
+  }  
 
   closeTheDialog():void{
     this.dialogRef.close({ result: "User logs in" })

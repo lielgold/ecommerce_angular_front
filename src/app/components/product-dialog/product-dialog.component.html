@@ -1,11 +1,13 @@
-<h1 mat-dialog-title class="bigger-text">{{ this.product_data.name }}</h1>
+<h1 mat-dialog-title class="bigger-text">{{ this.product.name }}</h1>
 <mat-dialog-content>
-  <img [src]="'assets/images/orange_1.png'" alt="{{ product_data.name }}" style="max-width: 256px; max-height: 256px;" />
-  <p><strong>Price:{{ this.product_data.price }}$</strong></p>
-  <p>Category: {{ this.product_data.category }}</p>
-  <p>{{ this.product_data.description }}</p>    
+  <img [src]="'assets/images/orange_1.png'" alt="{{ product.name }}" style="max-width: 256px; max-height: 256px;" />
+  <p><strong>Price:{{ this.product.price }}$</strong></p>
+  <p>Category: {{ this.product.category }}</p>
+  <p>{{ this.product.description }}</p>    
 </mat-dialog-content>
-<mat-dialog-actions class="button-row">    
+<mat-dialog-actions class="button-row">
+  <!-- product list dialog -->
+  <div *ngIf="this.dialog_type==='product_list'">
     <button mat-raised-button extended color="primary" (click)="addToShoppingCart()" *ngIf="this.sharedService.isLoggedIn">
         <mat-icon>add_shopping_cart</mat-icon>
         Add To Shopping Cart
@@ -21,8 +23,17 @@
         Remove product from catalog
         </button>
         
-        <button mat-raised-button extended color="warn" *ngIf="!this.sharedService.isLoggedIn" routerLink="/login_page"  (click)="closeTheDialog()">
+        <button mat-raised-button extended color="warn" routerLink="/login_page"  (click)="closeTheDialog()" *ngIf="!this.sharedService.isLoggedIn">
         <mat-icon>login</mat-icon>
         Login to buy
         </button>
+    </div>
+
+    <!-- shopping cart dialog -->
+    <div *ngIf="this.dialog_type==='shopping_cart'">
+      <button mat-raised-button extended color="primary" (click)="checkoutProduct()" *ngIf="this.sharedService.isLoggedIn">
+          <mat-icon>shopping_cart</mat-icon>
+          Buy
+          </button>
+    </div>    
 </mat-dialog-actions>

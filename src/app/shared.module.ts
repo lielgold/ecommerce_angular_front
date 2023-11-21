@@ -289,8 +289,30 @@ export class SharedService {
         // Handle logout error
       }
     );
-  }    
+  }
 
-      
+  // Buy all products with the given id
+  checkout(products_id:number[]): void {
+    //this.httpClient.post(BACK_URL + '/checkout', {productIds: id_products_to_buy }).subscribe(
+    this.httpClient.post(BACK_URL + '/checkout/',{ productIds: products_id }).subscribe(
+      () => {
+        console.log('checkout successful');
+        for(const id of products_id){
+          this.removeProductFromCartByID(id);
+        };        
+        //this.sharedService.removeAllProductsFromCart();
+        // TODO show an alert to the user the he bought the items
+      },
+      (error) => {
+        console.error('Error during checkout:', error);        
+      }
+    );
+  }  
+
+  // Buy all products with the given id
+  checkout_all(): void {
+    const id_products_to_buy: number[] = this.shopping_cart.map(p => p._id);
+    this.checkout(id_products_to_buy);
+  }    
 
 }
