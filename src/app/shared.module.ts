@@ -256,13 +256,13 @@ export class SharedService {
       }        
 
     update_login_status(){
-        if(localStorage.getItem('token')) this.isLoggedIn = true;
+        if(localStorage.getItem('token')!=='') this.isLoggedIn = true;
         else this.isLoggedIn = false;
 
-        if(localStorage.getItem('isUserAdmin')) this.isUserAdmin = true;
+        if(localStorage.getItem('isUserAdmin')=='true') this.isUserAdmin = true;
         else this.isUserAdmin = false;
 
-        if(localStorage.getItem('username')) {
+        if(localStorage.getItem('username')!=='') {
             const n = localStorage.getItem('username');
             if (n!=null) this.loggedUsername = n;
         }
