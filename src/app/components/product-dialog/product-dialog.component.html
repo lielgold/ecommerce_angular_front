@@ -39,17 +39,18 @@
 
     <!-- shopping cart dialog -->
     <div *ngIf="this.dialog_type==='wish_list'">
-      <button mat-raised-button extended color="primary" (click)="removeProductFromWIshList()" *ngIf="this.sharedService.isLoggedIn">
-          <mat-icon>shopping_cart</mat-icon>
-          Remove from wish list
-          </button>
-    </div> 
-    
-    <!-- shopping cart dialog -->
-    <div *ngIf="this.dialog_type==='wish_list'">
       <button mat-raised-button extended color="primary" (click)="MoveProductToCart()" *ngIf="this.sharedService.isLoggedIn">
           <mat-icon>shopping_cart</mat-icon>
           Move to cart
           </button>
-    </div>     
+    </div>      
+
+    <!-- shopping cart dialog -->
+    <div *ngIf="this.dialog_type==='wish_list'">
+      <button mat-raised-button extended color="warn" (click)="removeProductFromWIshList()" *ngIf="this.sharedService.isLoggedIn">
+          <mat-icon>shopping_cart</mat-icon>
+          Remove from wish list
+          </button>
+    </div>    
+   
 </mat-dialog-actions>

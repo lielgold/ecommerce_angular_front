@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 
-import { BACK_URL, Product, SharedService } from '../../shared.module';
+import { Product, SharedService } from '../../shared.module';
 import { inject} from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -59,18 +59,6 @@ export class ProductsListComponent implements OnInit{
       this.sharedService.addProductToCatalog(newProduct);
       this.productForm.reset();
     }
-  }
-
-  // Restricted test
-  restricted_test(): void {    
-    this.httpClient.get(BACK_URL + '/restricted_test', {}).subscribe(
-      () => {
-        console.log('restricted_test successful');        
-      },
-      (error) => {
-        console.error('Error during restricted_test:', error);        
-      }
-    );
   }
 
   // Modify filterProducts to use this.search_value
