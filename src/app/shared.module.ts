@@ -192,14 +192,15 @@ export class SharedService {
       }
 
       // update filter_products_list to only contain those that contain the search string
-      filterProducts(searchTerm: string): void {
+      filterProducts(searchTerm: string, category:string): void {
         // Use lowercase for case-insensitive search
         const filterValue = searchTerm ? searchTerm.toLowerCase() : '';
       
         // Filter products based on the search term
         this.filtered_products_list = this.products_list.filter((product) =>
-          product.name.toLowerCase().includes(filterValue)
-        );
+          product.name.toLowerCase().includes(filterValue) &&
+          (category === 'all' || product.category.toLowerCase() === category.toLowerCase())
+        );        
       }
       // reset the filter
       resetFilter():void{
@@ -338,7 +339,7 @@ export class SharedService {
   // should be removed when adding support for images on the backend
   get_image_source(product_category:string):string{
     if(product_category==='orange'){
-      return "assets/images/orange_1.png";
+      return "assets/images/orange.jpg";
     }
     else if(product_category==='yellow'){
       return "assets/images/lemon.jpg";

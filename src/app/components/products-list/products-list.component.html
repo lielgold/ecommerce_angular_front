@@ -4,6 +4,18 @@
 
 <!-- Search form -->
 <form [formGroup]="searchForm" (ngSubmit)="filterProducts()">
+  <!-- Category selection dropdown -->
+  <mat-form-field appearance="fill" style="margin-right: 8px;">
+    <mat-label>Category:</mat-label>
+    <mat-select formControlName="category">
+      <mat-option value="all">All</mat-option>
+      <mat-option value="orange">Orange</mat-option>
+      <mat-option value="red">Red Orange</mat-option>
+      <mat-option value="yellow">Yellow Orange</mat-option>
+    </mat-select>
+  </mat-form-field>  
+  
+  <!-- Search string -->  
   <mat-form-field appearance="fill">
     <mat-label>Search:</mat-label>
     <input matInput id="search_string" formControlName="search_string" required>

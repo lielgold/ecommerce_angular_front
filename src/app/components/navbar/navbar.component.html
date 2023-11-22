@@ -1,15 +1,15 @@
 <p></p>
 
-<mat-toolbar color="primary">  
+<mat-toolbar style="background-color: rgb(253, 207, 122);">  
 
-  <img class="logo-img" src="assets/images/company-logo.svg" alt="Company Logo" routerLink="/">
+  <img class="logo-img" src="assets/images/logo.svg" alt="Company Logo" routerLink="/">
 
   
 
   <div class="navbar-brand">
-    <a class="navbar-item" routerLink="/">Catalog</a>
-    <a class="navbar-item" routerLink="/about">About</a>
-    <a class="navbar-item" routerLink="/contact">Contact</a>
+    <a class="navbar-item no-underline" routerLink="/">Catalog</a>
+    <a class="navbar-item no-underline" routerLink="/about">About</a>
+    <a class="navbar-item no-underline" routerLink="/contact">Contact</a>
   </div>
 
   <div class="navbar-menu">
@@ -21,7 +21,7 @@
       </a>
 
       <!-- shopping cart -->
-      <a class="navbar-item" routerLink="shopping_cart" *ngIf="this.sharedService.isLoggedIn">
+      <a class="navbar-item no-underline" routerLink="shopping_cart" *ngIf="this.sharedService.isLoggedIn">
         <mat-icon matBadge="{{this.sharedService.shopping_cart.length}}" matBadgeColor="warn" color="white">shopping_cart</mat-icon>            
           <span class="cdk-visually-hidden">
             Shopping cart
@@ -30,7 +30,7 @@
     </a>
 
       <!-- Wish List -->
-      <a class="navbar-item" routerLink="wish_list" *ngIf="this.sharedService.isLoggedIn">
+      <a class="navbar-item no-underline" routerLink="wish_list" *ngIf="this.sharedService.isLoggedIn">
         <mat-icon matBadge="{{this.sharedService.wish_list.length}}" matBadgeColor="warn" color="white" >favorite</mat-icon>            
           <span class="cdk-visually-hidden">
             Wish List
@@ -39,12 +39,12 @@
       </a>      
 
     <!-- Login -->
-    <a class="navbar-item" *ngIf="!this.sharedService.isLoggedIn" routerLink="/login_page">
+    <a class="navbar-item no-underline" *ngIf="!this.sharedService.isLoggedIn" routerLink="/login_page">
       <mat-icon>login</mat-icon>
       Login
     </a>
     <!-- Logout -->
-    <a class="navbar-item" *ngIf="this.sharedService.isLoggedIn" routerLink="/" (click)="this.sharedService.logout()">
+    <a class="navbar-item no-underline" *ngIf="this.sharedService.isLoggedIn" routerLink="/" (click)="this.sharedService.logout()">
       <mat-icon>logout</mat-icon>
       Logout
     </a>
