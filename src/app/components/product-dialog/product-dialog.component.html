@@ -1,6 +1,6 @@
 <h1 mat-dialog-title class="bigger-text">{{ this.product.name }}</h1>
 <mat-dialog-content>
-  <img [src]="'assets/images/orange_1.png'" alt="{{ product.name }}" style="max-width: 256px; max-height: 256px;" />
+  <img [src]="this.sharedService.get_image_source(product.category)" alt="{{ product.name }}" style="max-width: 256px; max-height: 256px;" />
   <p><strong>Price:{{ this.product.price }}$</strong></p>
   <p>Category: {{ this.product.category }}</p>
   <p>{{ this.product.description }}</p>    

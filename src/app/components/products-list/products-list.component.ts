@@ -53,7 +53,7 @@ export class ProductsListComponent implements OnInit{
         name: this.productForm.value.name,
         price: this.productForm.value.price,
         description: this.productForm.value.description,
-        category: this.productForm.value.category
+        category: this.productForm.value.category,
       };
 
       this.sharedService.addProductToCatalog(newProduct);
@@ -79,7 +79,7 @@ export class ProductsListComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      //console.log('The dialog was closed with result:', result);
+      console.log('The dialog was closed with result:', result);
     });
   }  
 }

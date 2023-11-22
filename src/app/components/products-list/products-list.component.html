@@ -18,7 +18,7 @@
       <mat-card-title-group>
         <mat-card-title>{{ product.name }}</mat-card-title>
         <mat-card-subtitle>{{ product.price }}$</mat-card-subtitle>
-        <img mat-card-md-image src="assets/images/orange_1.png" >
+        <img mat-card-md-image src={{this.sharedService.get_image_source(product.category)}}>
       </mat-card-title-group>
     </mat-card-header>
   </mat-card>
@@ -49,7 +49,7 @@
     <mat-select id="category" formControlName="category" required>
       <mat-option value="yellow">Yellow</mat-option>
       <mat-option value="red">Red</mat-option>
-      <mat-option value="blue">Blue</mat-option>
+      <mat-option value="orange">Orange</mat-option>
     </mat-select>
   </mat-form-field>
 

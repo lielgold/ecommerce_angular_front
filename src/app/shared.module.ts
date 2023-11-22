@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertComponent } from './components/alert/alert.component';
 
+
 interface LoginResponse {
     token: string;  
     isUserAdmin: string;
@@ -16,7 +17,7 @@ export interface Product {
     name: string;
     price: number;
     description: string;
-    category: 'yellow' | 'red' | 'blue';    
+    category: 'yellow' | 'red' | 'orange';
   }
 
 @Injectable({
@@ -331,6 +332,21 @@ export class SharedService {
 
     // Open the dialog
     const dialogRef = this.dialog.open(AlertComponent, dialogConfig);    
-  }   
+  }
+
+  // get an image source based on the category of the product
+  // should be removed when adding support for images on the backend
+  get_image_source(product_category:string):string{
+    if(product_category==='orange'){
+      return "assets/images/orange_1.png";
+    }
+    else if(product_category==='yellow'){
+      return "assets/images/lemon.jpg";
+    }
+    else if(product_category==='red'){
+      return "assets/images/pomegranate.jpg";
+    }    
+    throw new Error('Invalid product category: ' + product_category);
+  }
 
 }
