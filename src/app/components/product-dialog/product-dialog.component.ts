@@ -21,11 +21,11 @@ import { RouterLink } from '@angular/router';
 export class ProductDialogComponent {
   sharedService = inject(SharedService);
   product:Product;
-  dialog_type:string;
+  dialog_type:string;  
   
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { product: Product, dialog_type: string }, public dialogRef: MatDialogRef<ProductDialogComponent>) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { product: Product, dialog_type: 'product_list' | 'shopping_cart' | 'wish_list'  }, public dialogRef: MatDialogRef<ProductDialogComponent>) { //TODO do this for dialog_type: alertType: 'warning' | 'information'
     this.product=data.product;
-    this.dialog_type=data.dialog_type;
+    this.dialog_type=data.dialog_type;    
   }
 
   addToWishlist(): void {    

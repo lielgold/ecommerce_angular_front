@@ -3,6 +3,8 @@ export const BACK_URL = 'http://localhost:3000';
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertComponent } from './components/alert/alert.component';
 
 interface LoginResponse {
     token: string;  
@@ -29,7 +31,7 @@ export class SharedService {
     isLoggedIn:boolean=false;
     loggedUsername:string='';
 
-    constructor(private httpClient: HttpClient, private router: Router){        
+    constructor(private httpClient: HttpClient, private router: Router, public dialog: MatDialog){        
     }    
 
     fetchProductData(): void {
@@ -48,11 +50,13 @@ export class SharedService {
     addProductToCatalog(newProduct:Product):void{        
         this.httpClient.post(BACK_URL + '/products/', newProduct).subscribe(
             (data) => {
-              console.log('Product added successfully:', data);
+              //console.log('Product added successfully:', data);
+              this.showAlert("Product added successfully", "", "success");
               this.fetchProductData();
             },
             (error) => {
-              console.error('Error adding new product:', error);
+              //console.error('Error adding new product:', error);
+              this.showAlert("Error adding new product", "", "warning");
             }
         );
     }
@@ -61,11 +65,13 @@ export class SharedService {
     removeProductFromCatalog(productID:number): void {
         this.httpClient.post(BACK_URL + `/remove/${productID}`, {}).subscribe(
             (data) => {
-              console.log('Product deleted successfully:', data);
+              //console.log('Product deleted successfully:', data);
+              this.showAlert("Product deleted successfully", "", "success");
               this.fetchProductData();
             },
             (error) => {
-              console.error('Error deleting product:', error);
+              //console.error('Error deleting product:', error);
+              this.showAlert("Error deleting product", "", "warning");
             }
           );
     }
@@ -120,7 +126,7 @@ export class SharedService {
     isProductInCart(productID: number): boolean {
         for(const p of this.shopping_cart){
             if (p._id===productID){
-                // TODO add an alert to the user that the product is already in the cart
+                this.showAlert("The product is already in the cart", "", "information")                 
                 return true;
             }
         }
@@ -154,8 +160,8 @@ export class SharedService {
     // Check if a product is in the shopping cart
     isProductInWishList(productID: number): boolean {
         for(const p of this.wish_list){
-            if (p._id===productID){
-                // TODO add an alert to the user that the product is already in the wish list                
+            if (p._id===productID){                
+                this.showAlert("The product is already in the wish list", "Thanks!", "information");
                 return true
             }
         }   
@@ -173,17 +179,14 @@ export class SharedService {
     
           if (!isProductInCart) {
             this.shopping_cart.push(product);
-            this.wish_list.splice(productIndex, 1);
-    
-            // TODO: Add an alert to the user that the product is moved to the cart
-            console.log('Product moved to the cart:', product);
-          } else {
-            // TODO: Add an alert to the user that the product is already in the cart
-            console.log('Product is already in the cart:', product);
+            this.wish_list.splice(productIndex, 1);    
+            
+            this.showAlert("Product moved to the cart: " + product.name, "", "information")        
+          } else {            
+            this.showAlert("Product is already in the cart: " + product.name, "", "information")                    
           }
-        } else {
-          // TODO: Add an alert to the user that the product was not found in the wish list
-          console.log('Product not found in the wish list:', productID);
+        } else {                    
+          this.showAlert("Product not found in the wish list: " + productID, "", "warning")        
         }
       }
 
@@ -212,18 +215,20 @@ export class SharedService {
           // Assuming there's a login endpoint on your backend
           this.httpClient.post<LoginResponse>(BACK_URL + '/login/', loginData).subscribe(
             (data) => {
-              console.log('Login successful:', data);          
+              //console.log('Login successful:', data);          
               // Save token to localStorage
               localStorage.setItem('token', data.token);
               localStorage.setItem('isUserAdmin', data.isUserAdmin);
               localStorage.setItem('username', username);
               this.update_login_status();
               //console.log('Token from localStorage:', localStorage.getItem('token'));
-              // Handle successful login, e.g., redirect to a new page          
+              // Handle successful login, e.g., redirect to a new page  
+              this.showAlert("Login successful", "", "success");
+                      
             },
             (error) => {
-              console.error('Error logging in:', error);
-              // Handle login error, e.g., display an error message
+              //console.error('Error logging in:', error);
+              this.showAlert("Error logging in", "", "warning");              
             }
           ); 
       }
@@ -239,18 +244,16 @@ export class SharedService {
           // Assuming there's a login endpoint on your backend
           this.httpClient.post<LoginResponse>(BACK_URL + '/register/', registerData).subscribe(
             (data) => {
-              console.log('Registration successful:', data);
-              console.log('token:', data.token);
-              console.log('isUserAdmin:', data.isUserAdmin);
+              //console.log('Registration successful:', data);              
               localStorage.setItem('token', data.token);
               localStorage.setItem('isUserAdmin', data.isUserAdmin);
               localStorage.setItem('username', username);
-              this.update_login_status();              
-              // TODO add a succesful logged in message              
+              this.update_login_status();
+              this.showAlert("Registration successful", "", "success");                     
             },
-            (error) => {
-              console.error('Error logging in:', error);
-              // TODO Handle login error, e.g., display an error message
+            (error) => {              
+              console.error('Registration error:', error);
+              this.showAlert("Registration error", "", "warning");
             }
           ); 
       }        
@@ -281,12 +284,12 @@ export class SharedService {
 
     this.httpClient.post(BACK_URL + '/logout', {}).subscribe(
       () => {
-        console.log('Logout successful');
-        //this.router.navigate(['/']); // Navigate to the root route
+        //console.log('Logout successful');
+        this.showAlert("Logout successful", "", "success");        
       },
       (error) => {
-        console.error('Error during logout:', error);
-        // Handle logout error
+        //console.error('Error during logout:', error);
+        this.showAlert("Error during logout", "", "warning");        
       }
     );
   }
@@ -296,15 +299,15 @@ export class SharedService {
     //this.httpClient.post(BACK_URL + '/checkout', {productIds: id_products_to_buy }).subscribe(
     this.httpClient.post(BACK_URL + '/checkout/',{ productIds: products_id }).subscribe(
       () => {
-        console.log('checkout successful');
+        //console.log('checkout successful');
         for(const id of products_id){
           this.removeProductFromCartByID(id);
-        };        
-        //this.sharedService.removeAllProductsFromCart();
-        // TODO show an alert to the user the he bought the items
+        };                        
+        this.showAlert("Purchase Complete", "Thanks!", "success");
       },
       (error) => {
-        console.error('Error during checkout:', error);        
+        //console.error('Error during checkout:', error);
+        this.showAlert("Error during checkout", "", "warning");
       }
     );
   }  
@@ -312,9 +315,22 @@ export class SharedService {
   // Buy all products with the given id
   checkout_all(): void {
     const id_products_to_buy: number[] = this.shopping_cart.map(p => p._id);
+    if(id_products_to_buy.length===0) return;
     this.checkout(id_products_to_buy);
-  }    
+  }
 
-  
+  // Function to open the alert dialog
+  showAlert(title: string, message: string, alertType:string): void {
+    const dialogConfig = new MatDialogConfig();
+
+    // Configure the dialog settings    
+    dialogConfig.panelClass = 'custom-dialog-class'; // Optional: Add a custom CSS class for styling
+
+    // Set the data to be passed to the dialog
+    dialogConfig.data = { title, message, alertType };
+
+    // Open the dialog
+    const dialogRef = this.dialog.open(AlertComponent, dialogConfig);    
+  }   
 
 }

@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component,inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { BACK_URL } from '../../shared.module';
+import { BACK_URL, SharedService } from '../../shared.module';
 
 @Component({
   selector: 'app-contact-page',
@@ -14,6 +14,7 @@ import { BACK_URL } from '../../shared.module';
 })
 export class ContactPageComponent {
   contactForm: FormGroup;
+  sharedService = inject(SharedService);
 
   constructor(private httpClient: HttpClient, private fb: FormBuilder) {
     this.contactForm = this.fb.group({
@@ -31,11 +32,12 @@ export class ContactPageComponent {
       // Implement your logic to handle form submission
       this.httpClient.post(BACK_URL + '/contact_us/', formData).subscribe(
         (data) => {
-          console.log('Feedback sent successfully:', data);          
-          // TODO show a nice alert to the user thanking it for the feedback
+          //console.log('Feedback sent successfully:', data);                    
+          this.sharedService.showAlert("Feedback submitted", "Thanks!", "success");
         },
         (error) => {
-          console.error('Error sending feedback:', error);
+          //console.error('Error sending feedback:', error);
+          this.sharedService.showAlert("Error sending feedback", "", "warning");
         }
       );
     }
