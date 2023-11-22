@@ -6,7 +6,7 @@
         <mat-card-title-group>
           <mat-card-title>{{ product.name }}</mat-card-title>
           <mat-card-subtitle>{{ product.price }}$</mat-card-subtitle>
-          <img mat-card-md-image src="assets/images/orange_1.png" >
+          <img mat-card-md-image src={{this.sharedService.get_image_source(product.category)}} >
         </mat-card-title-group>
       </mat-card-header>
     </mat-card>

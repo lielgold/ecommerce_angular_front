@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-products-list',
@@ -27,7 +28,7 @@ export class ProductsListComponent implements OnInit{
   sharedService = inject(SharedService);
   searchForm: FormGroup;  
 
-  constructor(private httpClient: HttpClient, private formBuilder: FormBuilder, public dialog: MatDialog) {
+  constructor(private httpClient: HttpClient, private formBuilder: FormBuilder, public dialog: MatDialog, private route: ActivatedRoute) {
     this.productForm = this.formBuilder.group({
       name: ['', Validators.required],
       price: [0, Validators.required],
@@ -38,12 +39,23 @@ export class ProductsListComponent implements OnInit{
     // Initialize the search form
     this.searchForm = this.formBuilder.group({
       search_string: ['', Validators.required],
-    });    
-    
+      category: ['all', Validators.required],
+    });        
   }
 
   ngOnInit(): void {    
-    if(this.sharedService.products_list.length===0) this.sharedService.fetchProductData();
+    if(this.sharedService.products_list.length===0) this.sharedService.fetchProductData();    
+    
+    // update filter when the user changes category
+    this.searchForm.valueChanges.subscribe(() => {      
+      this.filterProducts();
+    });
+
+    // reset filters after changing tabs
+    this.route.url.subscribe(() => {
+      // This block of code will run every time the route changes
+      this.filterProducts();
+    });
   }
 
   onSubmitNewProductForm(): void {
@@ -53,7 +65,7 @@ export class ProductsListComponent implements OnInit{
         name: this.productForm.value.name,
         price: this.productForm.value.price,
         description: this.productForm.value.description,
-        category: this.productForm.value.category
+        category: this.productForm.value.category,
       };
 
       this.sharedService.addProductToCatalog(newProduct);
@@ -63,14 +75,15 @@ export class ProductsListComponent implements OnInit{
 
   // Modify filterProducts to use this.search_value
   filterProducts(): void {
-    // Use lowercase for case-insensitive search
+    // Use lowercase for case-insensitive search    
     const filterValue = this.searchForm.value.search_string.toLowerCase();
     if (filterValue==='') {
       this.sharedService.resetFilter();
     }
+    
 
     // Filter products based on the search term
-    this.sharedService.filterProducts(filterValue);
+    this.sharedService.filterProducts(filterValue, this.searchForm.value.category);
   }
 
   openDialog(product: Product): void {        

@@ -34,3 +34,7 @@ mat-toolbar {
 .navbar-end {
   margin-left: auto; /* Align items to the right */
 }
+
+.no-underline {
+  text-decoration: none;
+}
