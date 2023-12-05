@@ -1,27 +1,31 @@
-# AngularFront
+# Small E-commerce Website
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
+This is a small E-commerce website made with NodeJS and Angular.
 
-## Development server
+## Backend
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+It's in [this](https://github.com/lielgold/nodejs_site) repository. Made with NodeJS and Express, utilizing MongoDB as the database.
 
-## Code scaffolding
+## Installation and Running the Backend
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Install MongoDB. 
+- Run a local server on mongodb://localhost:27017 (the default option). "The easy way to do it is to install MongoDB Compass and follow the on-screen instructions..
+- Install npm.
+- Run "npm install" in the root directory.
+- Run "npm start" in the root directory.
 
-## Build
+By default the backend will use port 3000.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Frontend
 
-## Running unit tests
+It's in [this](https://github.com/lielgold/angular_front) repository. Made with Angular v17. 
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Installation and Running the Frontend
 
-## Running end-to-end tests
+- Install npm.
+- Run "npm install" in the root directory.
+- Run "ng serve" in the root directory.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+By default, the frontend will use port 4200, and the website can be accessed at http://localhost:4200/.
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+![Screenshot1](screenshot.jpg?raw=true "Title")

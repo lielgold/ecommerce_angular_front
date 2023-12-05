@@ -1,5 +1,11 @@
 <!-- <div class="alert" [ngClass]="alertType"> -->
-<div class="{{this.alertType}}">
+<div class="{{this.alertType}}" style="    padding: 20px;
+                                            text-align: center;
+                                            position: fixed;
+                                            bottom: 20px;
+                                            left: 50%;
+                                            transform: translateX(-50%);
+                                            border-radius: 5px;">
     <h2>{{ data.title }}</h2>
     <p>{{ data.message }}</p>    
   </div>
